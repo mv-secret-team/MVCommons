@@ -12,7 +12,7 @@
  /*:
   * @plugindesc Great utility library that provides common-use and simplified functions. Also expands default classes.
   * 
-  * @author The MV Secret Team (Zalerinian, Ramiro, Hudell, Dekita)
+  * @author Originally Zalerinian, Ramiro, Hudell, Dekita
   *
   * @help
   * ==============================================================================
