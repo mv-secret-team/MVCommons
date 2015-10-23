@@ -2,7 +2,7 @@
 // MVCommons
 // By The MV Secret Team
 // MVCommons.js
-// Version: 1.0.1
+// Version: 1.0.2
 // Released under CC0 Universal 1.0
 // You can read the full license from here:
 //    https://creativecommons.org/publicdomain/zero/1.0/legalcode
@@ -129,7 +129,7 @@ var MVC = MVCommons;
     * @param mimeType a mimeType to parse, by default it checks the file extension
     * @return the text of the file as an string
     */
-  function loadFile(filePath, mimeType) {
+  function ajaxLoadFile(filePath, mimeType) {
     var xmlhttp=new XMLHttpRequest();
     xmlhttp.open("GET",filePath,false);
     if (mimeType && xmlhttp.overrideMimeType) {
@@ -152,7 +152,7 @@ var MVC = MVCommons;
     * @param onLoad A callback to call when the file loads successfully.
     * @param onError A callback to call if there is an error laoding the file.
     */
-  function loadFileAsync(filePath, mimeType, onLoad, onError){
+  function ajaxLoadFileAsync(filePath, mimeType, onLoad, onError){
     var xhr = new XMLHttpRequest();
     var name = '$' + filePath.replace(/^.*(\\|\/|\:)/, '').replace(/\..*/, '');
     xhr.open('GET', filePath);
@@ -1091,5 +1091,5 @@ var MVC = MVCommons;
     website: "http://www.razelon.com"
   }];
   PluginManager.register("PluginManagement", "1.0.0", Imported["PluginManagement"], authors, "2015-10-07");
-  PluginManager.register("MVCommons", "1.0.1", "Great utility library to allow common usage", authors, "2015-10-09");
+  PluginManager.register("MVCommons", "1.0.2", "Great utility library to allow common usage", authors, "2015-10-09");
 })();
