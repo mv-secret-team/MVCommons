@@ -2,7 +2,7 @@
 // MVCommons
 // By The MV Secret Team
 // MVCommons.js
-// Version: 1.0.0
+// Version: 1.0.1
 // Released under CC0 Universal 1.0
 // You can read the full license from here:
 //    https://creativecommons.org/publicdomain/zero/1.0/legalcode
@@ -11,7 +11,7 @@
 
  /*:
   * @plugindesc Great utility library that provides common-use and simplified functions. Also expands default classes.
-  * 
+  *
   * @author Originally Zalerinian, Ramiro, Hudell, Dekita
   *
   * @help
@@ -37,9 +37,9 @@
   *    Stay Up To Date
   * ==============================================================================
   * I advise that you check regularly to see if the MVC plugin has been updated.
-  * Plugin updates will include things like bugfixes and new features, so it is 
-  * highly recommended. 
-  * 
+  * Plugin updates will include things like bugfixes and new features, so it is
+  * highly recommended.
+  *
   * You can get the latest versions of MVC via any of the following links'
   * http://link.hudell.com/mvcommons
   * http://dekyde.com/mvcommons
@@ -136,7 +136,7 @@ var MVC = MVCommons;
       xmlhttp.overrideMimeType(mimeType);
     }
     xmlhttp.send();
-    if (xmlhttp.status==200) {
+    if (xmlhttp.status < 200) {
       return xmlhttp.responseText;
     }
     else {
@@ -698,10 +698,10 @@ var MVC = MVCommons;
    * PluginManager.printPlugin(string key)
    *   key: The key for a plugin's entry. If the given key was not
    *        registered with the PluginManager, the function fails.
-   * 
+   *
    * Logs a plugin's information to the console.
    * -----------------------------------------------------------------------
-   */ 
+   */
   $.printPlugin = function (key) {
     if (console) {
       if(this.imported(key)){
@@ -1058,6 +1058,20 @@ var MVC = MVCommons;
   }
 })(StorageManager);
 
+// DataManager
+(function($){
+  $.ajaxLoadFile      = MVC.ajaxLoadFile;
+  $.ajaxLoadFileAsync = MVC.ajaxLoadFileAsync;
+  $.localContentPath  = StorageManager.localContentPath;
+  $.storageFileExists = StorageManager.storageFileExists;
+  $.directoryExists   = StorageManager.directoryExists;
+  $.removeDirectory   = StorageManager.removeDirectory;
+  $.storageSaveFile   = StorageManager.storageSaveFile;
+  $.storageLoadFile   = StorageManager.storageLoadFile;
+  $.storageRemoveFile = StorageManager.storageRemoveFile;
+})(DataManager);
+
+
 (function() {
   var authors = [{
     email: "dekita@dekyde.com",
@@ -1077,5 +1091,5 @@ var MVC = MVCommons;
     website: "http://www.razelon.com"
   }];
   PluginManager.register("PluginManagement", "1.0.0", Imported["PluginManagement"], authors, "2015-10-07");
-  PluginManager.register("MVCommons", "1.0.0", "Great utility library to allow common usage", authors, "2015-10-09");
+  PluginManager.register("MVCommons", "1.0.1", "Great utility library to allow common usage", authors, "2015-10-09");
 })();
