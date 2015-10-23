@@ -2,7 +2,7 @@
 // MVCommons
 // By The MV Secret Team
 // MVCommons.js
-// Version: 1.0.2
+// Version: 1.0.3
 // Released under CC0 Universal 1.0
 // You can read the full license from here:
 //    https://creativecommons.org/publicdomain/zero/1.0/legalcode
@@ -24,7 +24,7 @@
   * This help file will explain the provided functions and what their purpose
   * is.
   *
-  * This version of the MVCommons is: 1.0.0
+  * This version of the MVCommons is: 1.0.3
   * ==============================================================================
   *    The MVCommons module (Aliased as MVC)
   * ==============================================================================
@@ -420,8 +420,8 @@ var MVC = MVCommons;
   //============================================================================
 
   // File manipulation
-  $.loadFile         = loadFile;
-  $.loadFileAsync    = loadFileAsync;
+  $.ajaxLoadFile         = ajaxLoadFile;
+  $.ajaxLoadFileAsync    = ajaxLoadFileAsync;
 
   // Class easily manipulation
   $.extend           = extend;
@@ -1091,5 +1091,5 @@ var MVC = MVCommons;
     website: "http://www.razelon.com"
   }];
   PluginManager.register("PluginManagement", "1.0.0", Imported["PluginManagement"], authors, "2015-10-07");
-  PluginManager.register("MVCommons", "1.0.2", "Great utility library to allow common usage", authors, "2015-10-09");
+  PluginManager.register("MVCommons", "1.0.3", "Great utility library to allow common usage", authors, "2015-10-09");
 })();
