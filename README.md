@@ -1,2 +1,2 @@
 # MVCommons
-MVCommons - RPG Maker MV Community Library
+MVCommons - RPG Maker MV Community Core Library
