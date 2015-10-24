@@ -382,7 +382,7 @@ var MVC = MVCommons;
   function shallowClone(obj) {
     var result;
     if ($.isArray(obj)) {
-      return obj.map(function (i) { return $.shallowClone(i); });
+      return obj.slice(0);
     } else if (obj && !obj.prototype && (typeof obj == 'object' || obj instanceof Object)) {
       result = {};
       for (var p in obj) {
