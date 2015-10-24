@@ -2,7 +2,7 @@
 // MVCommons
 // By The MV Secret Team
 // MVCommons.js
-// Version: 1.0.3
+// Version: 1.0.4
 // Released under CC0 Universal 1.0
 // You can read the full license from here:
 //    https://creativecommons.org/publicdomain/zero/1.0/legalcode
@@ -24,7 +24,7 @@
   * This help file will explain the provided functions and what their purpose
   * is.
   *
-  * This version of the MVCommons is: 1.0.3
+  * This version of the MVCommons is: 1.0.4
   * ==============================================================================
   *    The MVCommons module (Aliased as MVC)
   * ==============================================================================
@@ -362,7 +362,7 @@ var MVC = MVCommons;
     var result;
     if ($.isArray(obj)) {
       return obj.map(function (i) { return $.deepClone(i); });
-    } else if (!object.prototype && (typeof object == 'object' || object instanceof Object)) {
+    } else if (obj && !obj.prototype && (typeof obj == 'object' || obj instanceof Object)) {
       result = {};
       for (var p in obj) {
         result[p] = $.deepClone(obj[p]);
@@ -382,8 +382,8 @@ var MVC = MVCommons;
   function shallowClone(obj) {
     var result;
     if ($.isArray(obj)) {
-      return obj.map(function (i) { return $.deepClone(i); });
-    } else if (!obj.prototype && (typeof obj == 'object' || obj instanceof Object)) {
+      return obj.map(function (i) { return $.shallowClone(i); });
+    } else if (obj && !obj.prototype && (typeof obj == 'object' || obj instanceof Object)) {
       result = {};
       for (var p in obj) {
         result[p] = obj[p];
@@ -1091,5 +1091,5 @@ var MVC = MVCommons;
     website: "http://www.razelon.com"
   }];
   PluginManager.register("PluginManagement", "1.0.0", Imported["PluginManagement"], authors, "2015-10-07");
-  PluginManager.register("MVCommons", "1.0.3", "Great utility library to allow common usage", authors, "2015-10-09");
+  PluginManager.register("MVCommons", "1.0.4", "Great utility library to allow common usage", authors, "2015-10-23");
 })();
