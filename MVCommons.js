@@ -1091,5 +1091,5 @@ var MVC = MVCommons;
     website: "http://www.razelon.com"
   }];
   PluginManager.register("PluginManagement", "1.0.0", Imported["PluginManagement"], authors, "2015-10-07");
-  PluginManager.register("MVCommons", "1.0.4", "Great utility library to allow common usage", authors, "2015-10-23");
+  PluginManager.register("MVCommons", "1.0.5", "Great utility library to allow common usage", authors, "2015-10-23");
 })();
