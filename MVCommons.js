@@ -791,7 +791,6 @@ var MVC = MVCommons;
       return false;
     }
     if(!!required){
-      console.log(required);
       if(!(typeof required === "object")) {
         required = Array(required);
       }
