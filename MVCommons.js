@@ -2,7 +2,7 @@
 // MVCommons
 // By The MV Secret Team
 // MVCommons.js
-// Version: 1.0.5
+// Version: 1.0.6
 // Released under CC0 Universal 1.0
 // You can read the full license from here:
 //    https://creativecommons.org/publicdomain/zero/1.0/legalcode
@@ -24,7 +24,7 @@
   * This help file will explain the provided functions and what their purpose
   * is.
   *
-  * This version of the MVCommons is: 1.0.4
+  * This version of the MVCommons is: 1.0.6
   * ==============================================================================
   *    The MVCommons module (Aliased as MVC)
   * ==============================================================================
@@ -1002,37 +1002,77 @@ var MVC = MVCommons;
   };
 })(ImageManager);
 
-(function($) { // StoreManager
-  $.fileExists = function(filePath) {
+// Storage Manager
+(function($) {
+  $.localContentPath = function() {
+    return this.localFileDirectoryPath().substring(0, this.localFileDirectoryPath().lastIndexOf("/") - 4);
+  }
+
+  $.storageFileExists = function(filePath, isRegex) {
     if(this.isLocalMode()) {
       var fs = require('fs');
-      return fs.existsSync(this.localFileDirectoryPath() + "../" + filePath);
+      try {
+        return fs.statSync(this.localContentPath() + filePath).isFile();
+      } catch(e) {
+        return false;
+      }
     } else {
       return !!localStorage.getItem(filePath);
     }
   }
 
-  $.saveFile = function(filePath, json) {
+  $.directoryExists = function(dirPath) {
+    if(this.isLocalMode()) {
+      try {
+        var fs = require('fs');
+        return fs.statSync(this.localContentPath() + dirPath).isDirectory();
+      } catch(e) {
+        return false;
+      }
+    } else {
+      return true;
+    }
+  }
+
+  $.removeDirectory = function(dirPath) {
+    if(this.isLocalMode()) {
+      try {
+        var fs = require('fs');
+        if(fs.statSync(this.localContentPath() + dirPath).isDirectory()) {
+          fs.rmdir(this.localContentPath() + dirPath);
+          return true;
+        }
+      } catch(e) {
+        return false;
+      }
+      fs.rmdir(this.localContentPath() + dirPath);
+    } else {
+      return true;
+    }
+  }
+
+  $.storageSaveFile = function(filePath, json) {
     if(this.isLocalMode()) {
       var data = LZString.compressToBase64(json);
       var fs = require('fs');
-      var dirPath = filePath.substring(0, filePath.lastIndexOf("/") + 1)
-      if(!fs.existsSync(dirPath)) {
-        fs.mkdirSync(dirPath);
-      }
-      fs.writeFileSync(this.localFileDirectoryPath() + "../" + filePath, data);
+      var dirPath = this.localContentPath() + filePath.substring(0, filePath.lastIndexOf("/") + 1)
+      fs.mkdirSync(dirPath);
+      fs.writeFileSync(this.localContentPath() + filePath, data);
     } else {
        var data = LZString.compressToBase64(data);
        localStorage.saveItem(filePath, data);
     }
   }
 
-  $.loadFile = function(filePath) {
+  $.storageLoadFile = function(filePath) {
     if(this.isLocalMode()) {
       var fs = require('fs');
-      if(fs.statsSync(this.localFileDirectoryPath() + "../" + filePath).isFile()){
-        return LZString.decompressFromBase64(fs.readFileSync(this.localFileDirectoryPath() + "../" + filePath, {encoding: 'utf8'}));
-      } else {
+      try {
+        if(fs.statSync(this.localContentPath() + filePath).isFile()){
+          return LZString.decompressFromBase64(fs.readFileSync(this.localContentPath() + filePath, {encoding: 'utf8'}));
+        }
+      } catch(e) {
+        console.error("Error loading file: " + e);
         return null;
       }
     } else {
@@ -1044,11 +1084,15 @@ var MVC = MVCommons;
     }
   }
 
-  $.deleteFile = function(filePath) {
+  $.storageRemoveFile = function(filePath) {
     if(this.isLocalMode()) {
       var fs = require('fs');
-      if(fs.existsSync(this.localFileDirectoryPath() + "../" + filePath)) {
-        fs.unlinkSync(this.localFileDirectoryPath() + "../" + filePath);
+      try {
+        if(fs.statSync(this.localContentPath() + filePath).isFile()) {
+          fs.unlinkSync(this.localContentPath() + filePath);
+        }
+      } catch(e) {
+        console.error("Error deleting file: " + e);
       }
     } else {
       if(localStorage.getItem(filePath)) {
@@ -1091,5 +1135,5 @@ var MVC = MVCommons;
     website: "http://www.razelon.com"
   }];
   PluginManager.register("PluginManagement", "1.0.0", Imported["PluginManagement"], authors, "2015-10-07");
-  PluginManager.register("MVCommons", "1.0.5", "Great utility library to allow common usage", authors, "2015-10-23");
+  PluginManager.register("MVCommons", "1.0.6", "Great utility library to allow common usage", authors, "2015-10-24");
 })();
