@@ -2,7 +2,7 @@
 // MVCommons
 // By The MV Secret Team
 // MVCommons.js
-// Version: 1.0.4
+// Version: 1.0.5
 // Released under CC0 Universal 1.0
 // You can read the full license from here:
 //    https://creativecommons.org/publicdomain/zero/1.0/legalcode
@@ -119,7 +119,7 @@ var MVC = MVCommons;
     * @param str The string to compare to true.
     */
   function boolFunc(str) {
-    return Function("return " + str + " === true")();
+    return Function("return (" + str + " || false) === true")();
   }
 
   /**
