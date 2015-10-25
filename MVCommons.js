@@ -114,8 +114,23 @@ var MVC = MVCommons;
   };
 
   /**
-    * Converts the string to a boolean. Any string except 'true' will return
-    * false.
+    * Evaluates the given string as code, and strictly compares the result 
+    * to true. Since the string is evaluated as code, and is created
+    * as it is by creating an anonymous function to actually do the work,
+    * only variables in the global scope are accessible. All local variables
+    * are undefined. If you absolutely need a local variable to be
+    * comparable in this function, try putting it in your own global module.
+    * 
+    * For example, in all my scripts I define my module as Zale, and then
+    * have a sub module for each plugin, like so:
+    * 
+    * var Zale = Zale || {}; // Make sure to keep previous values
+    * Zale.NewPlugin = {}; // Create a space for plugin-specific values.
+    * 
+    * // Some time later...!
+    * Zale.NewPlugin.localVar = localVar;
+    * MVC.Boolean("Zale.NewPlugin.localVar");
+    * 
     * @param str The string to compare to true.
     */
   function boolFunc(str) {
