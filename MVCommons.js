@@ -2,7 +2,7 @@
 // MVCommons
 // By The MV Secret Team
 // MVCommons.js
-// Version: 1.0.6
+// Version: 1.1.0
 // Released under CC0 Universal 1.0
 // You can read the full license from here:
 //    https://creativecommons.org/publicdomain/zero/1.0/legalcode
@@ -430,6 +430,26 @@ var MVC = MVCommons;
     return result;
   };
 
+  /**
+   * Allows to match your string as any of this to true:
+   * - true
+   * - yes
+   * - active
+   * - enabled
+   * - on
+   * - y
+   *
+   * @param text The text to check.
+   * @return true if the text matches any of that text, or false.
+   * @note Value is case insensitive.
+   */
+  function naturalBoolean(text) {
+    if ( text.match(/(y(es)?)|true|on|active|enabled/gi) ) {
+      return true,
+    }
+    return false;
+  };
+
   //============================================================================
   // Export section
   //============================================================================
@@ -448,7 +468,8 @@ var MVC = MVCommons;
   $.isArray          = isArray;
   $.isFunction       = isFunction;
   $.Boolean          = boolFunc;
-
+  $.naturalBoolean   = naturalBoolean;
+  
   // Object manipulation
   $.shallowClone     = shallowClone;
   $.deepClone        = deepClone;
@@ -1149,5 +1170,5 @@ var MVC = MVCommons;
     website: "http://www.razelon.com"
   }];
   PluginManager.register("PluginManagement", "1.0.0", Imported["PluginManagement"], authors, "2015-10-07");
-  PluginManager.register("MVCommons", "1.0.6", "Great utility library to allow common usage", authors, "2015-10-24");
+  PluginManager.register("MVCommons", "1.1.0", "Great utility library to allow common usage", authors, "2015-10-24");
 })();
