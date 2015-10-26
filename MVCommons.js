@@ -445,7 +445,7 @@ var MVC = MVCommons;
    */
   function naturalBoolean(text) {
     if ( text.match(/(y(es)?)|true|on|active|enabled/gi) ) {
-      return true,
+      return true;
     }
     return false;
   };
