@@ -70,7 +70,7 @@ var MVC = MVCommons;
     return function () {
       return this['_' + name];
     };
-  };
+  }
 
   /**
    * Generates a setter based on a name
@@ -88,7 +88,7 @@ var MVC = MVCommons;
         }
       }
     };
-  };
+  }
 
   //============================================================================
   // Public functions
@@ -101,7 +101,7 @@ var MVC = MVCommons;
    */
   function isArray(o) {
       return Object.prototype.toString.apply(o) === '[object Array]';
-  };
+  }
 
   /**
    * Checks if an object is a function
@@ -111,7 +111,7 @@ var MVC = MVCommons;
   function isFunction(functionToCheck) {
     var getType = {};
     return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
-  };
+  }
 
   /**
     * Evaluates the given string as code, and strictly compares the result 
@@ -157,7 +157,7 @@ var MVC = MVCommons;
     else {
       throw new Error("Cannot load file " + filePath);
     }
-  };
+  }
 
   /**
     * Loads a file asynchronously (in the background), with custome callback
@@ -191,7 +191,7 @@ var MVC = MVCommons;
     xhr.onerror = onError;
     window[name] = null;
     xhr.send();
-  };
+  }
 
   /**
    * Provides an easy way to extend an rgss class
@@ -238,7 +238,7 @@ var MVC = MVCommons;
       get: arguments.length > 2 ? arguments[2] : defaultGetter(name),
       configurable: true
     });
-  };
+  }
 
   /**
    * Makes an easy way to define a writer (a setter to a variable)
@@ -253,7 +253,7 @@ var MVC = MVCommons;
       set: arguments.length > 2 ? arguments[2] : defaultSetter(name),
       configurable: true
     });
-  };
+  }
 
   /**
    * Makes an accessor (both getter and setter) of an object easily
@@ -271,7 +271,7 @@ var MVC = MVCommons;
       set: arguments.length > 2 ? arguments[2] : defaultSetter(name),
       configurable: true
     });
-  };
+  }
 
   /**
    * Gets a value from any of the following versions:
@@ -307,7 +307,7 @@ var MVC = MVCommons;
       result.params = match[2].split(',').map(function (i) { return i.trim(); });
     }
     return result;
-  };
+  }
 
   /**
     * Gets a property value in a case insensitive way
@@ -385,7 +385,7 @@ var MVC = MVCommons;
       return result;
     }
     return obj;
-  };
+  }
 
   /**
    * Clones an object with the same properties as the original.
@@ -406,7 +406,7 @@ var MVC = MVCommons;
       return result;
     }
     return obj;
-  };
+  }
 
   /**
    * Returns a new object with default attached objects if their properties
@@ -428,7 +428,7 @@ var MVC = MVCommons;
       }
     }
     return result;
-  };
+  }
 
   /**
    * Allows to match your string as any of this to true:
@@ -448,7 +448,7 @@ var MVC = MVCommons;
       return true;
     }
     return false;
-  };
+  }
 
   //============================================================================
   // Export section
@@ -493,8 +493,7 @@ var MVC = MVCommons;
       author.name, "color: black;", "color: rgb(27, 108, 184);",
       author.email,
       "color: black;", "color: rgb(27, 108, 184);",
-      author.website, "color: black;"
-    );
+      author.website, "color: black;");
   };
 
   /**
@@ -516,8 +515,7 @@ var MVC = MVCommons;
       "color: rgb(27, 108, 184);",
       author.name,
       "color: black;", "color: rgb(27, 108, 184);",
-      author.website, "color: black;"
-    );
+      author.website, "color: black;");
   };
 
   /**
@@ -537,8 +535,7 @@ var MVC = MVCommons;
     console.log("    %c%s%c <%c%s%c>.",
       "color: rgb(27, 108, 184);",
       author.name, "color: black;", "color: rgb(27, 108, 184);",
-      author.email, "color: black;"
-    );
+      author.email, "color: black;");
   };
 
   /**
@@ -573,8 +570,7 @@ var MVC = MVCommons;
       } else {
         console.log("    %c%s%c.",
           "color: rgb(27, 108, 184);",
-          author.name, "color: black;"
-        );
+          author.name, "color: black;");
       }
     }
   };
@@ -1041,7 +1037,7 @@ var MVC = MVCommons;
 (function($) {
   $.localContentPath = function() {
     return this.localFileDirectoryPath().substring(0, this.localFileDirectoryPath().lastIndexOf("/") - 4);
-  }
+  };
 
   $.storageFileExists = function(filePath, isRegex) {
     if(this.isLocalMode()) {
@@ -1054,7 +1050,7 @@ var MVC = MVCommons;
     } else {
       return !!localStorage.getItem(filePath);
     }
-  }
+  };
 
   $.directoryExists = function(dirPath) {
     if(this.isLocalMode()) {
@@ -1067,7 +1063,7 @@ var MVC = MVCommons;
     } else {
       return true;
     }
-  }
+  };
 
   $.removeDirectory = function(dirPath) {
     if(this.isLocalMode()) {
@@ -1081,23 +1077,25 @@ var MVC = MVCommons;
         return false;
       }
       fs.rmdir(this.localContentPath() + dirPath);
+      return true;
     } else {
       return true;
     }
-  }
+  };
 
   $.storageSaveFile = function(filePath, json) {
+    var data = undefined;
     if(this.isLocalMode()) {
-      var data = LZString.compressToBase64(json);
+      data = LZString.compressToBase64(json);
       var fs = require('fs');
-      var dirPath = this.localContentPath() + filePath.substring(0, filePath.lastIndexOf("/") + 1)
+      var dirPath = this.localContentPath() + filePath.substring(0, filePath.lastIndexOf("/") + 1);
       fs.mkdirSync(dirPath);
       fs.writeFileSync(this.localContentPath() + filePath, data);
     } else {
-       var data = LZString.compressToBase64(data);
-       localStorage.saveItem(filePath, data);
+      data = LZString.compressToBase64(data);
+      localStorage.saveItem(filePath, data);
     }
-  }
+  };
 
   $.storageLoadFile = function(filePath) {
     if(this.isLocalMode()) {
@@ -1117,7 +1115,7 @@ var MVC = MVCommons;
         return null;
       }
     }
-  }
+  };
 
   $.storageRemoveFile = function(filePath) {
     if(this.isLocalMode()) {
@@ -1134,7 +1132,7 @@ var MVC = MVCommons;
         localStorage.removeItem(filePath);
       }
     }
-  }
+  };
 })(StorageManager);
 
 // DataManager
