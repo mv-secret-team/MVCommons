@@ -2,7 +2,7 @@
 // MVCommons
 // By The MV Secret Team
 // MVCommons.js
-// Version: 1.1.0
+// Version: 1.2.0
 // Released under CC0 Universal 1.0
 // You can read the full license from here:
 //    https://creativecommons.org/publicdomain/zero/1.0/legalcode
@@ -450,6 +450,44 @@ var MVC = MVCommons;
     return false;
   }
 
+  /**
+   * Evaluates a context with some safety measure to stop it from breaking all.
+   *
+   * @param text The text to evaluate.
+   * @return The result of the expression or null if something fails.
+   *
+   */  
+  function safeEval(text) {
+    try {
+      return eval(text);
+    } catch(e) {
+      console.error(e); // print the error as error anyway
+      return null;
+    }
+  };
+  
+  /**
+   * Converts degrees into radians.
+   *
+   * @param deg Degrees to convert
+   * @return Radiants equivalent to those degrees.
+   *
+   */
+  function degToRad(deg) {
+    return deg * Math.PI / 180;
+  }
+  
+  /**
+   * Converts radians into degrees.
+   *
+   * @param rad Radians to convert
+   * @return Degrees equivalent to those radians.
+   *
+   */
+  function radToDeg(rad) {
+    return rad * 180 / Math.PI;
+  }
+
   //============================================================================
   // Export section
   //============================================================================
@@ -457,6 +495,10 @@ var MVC = MVCommons;
   // File manipulation
   $.ajaxLoadFile         = ajaxLoadFile;
   $.ajaxLoadFileAsync    = ajaxLoadFileAsync;
+
+  // Some math
+  $.degToRad = degToRad;
+  $.radToDeg = radToDeg;
 
   // Class easily manipulation
   $.extend           = extend;
@@ -479,7 +521,10 @@ var MVC = MVCommons;
   $.getTag           = getTag;
   $.getProp          = getProp;
   $.extractEventMeta = extractEventMeta;
-
+ 
+  // Evaling things
+  $.safeEval = safeEval;
+  
 })(MVCommons);
 
 
@@ -1168,5 +1213,5 @@ var MVC = MVCommons;
     website: "http://www.razelon.com"
   }];
   PluginManager.register("PluginManagement", "1.0.0", Imported["PluginManagement"], authors, "2015-10-07");
-  PluginManager.register("MVCommons", "1.1.0", "Great utility library to allow common usage", authors, "2015-10-24");
+  PluginManager.register("MVCommons", "1.2.0", "Great utility library to allow common usage", authors, "2015-10-24");
 })();
