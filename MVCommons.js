@@ -2,65 +2,91 @@
 // MVCommons
 // By The MV Secret Team
 // MVCommons.js
-// Version: 1.2.0
+// Version: 1.2.1
 // Released under CC0 Universal 1.0
 // You can read the full license from here:
 //    https://creativecommons.org/publicdomain/zero/1.0/legalcode
 // but basically means "public domain" in fancy words
 //=============================================================================
 
- /*:
-  * @plugindesc Great utility library that provides common-use and simplified functions. Also expands default classes.
-  *
-  * @author Originally Zalerinian, Ramiro, Hudell, Dekita
-  *
-  * @help
-  * ==============================================================================
-  *    Introduction
-  * ==============================================================================
-  * The MVCommons (MVC) plugin is a Software Development Kit (SDK) intended to
-  * help plugin makers by providing a standard way to do common functions.
-  *
-  * This help file will explain the provided functions and what their purpose
-  * is.
-  *
-  * This version of the MVCommons is: 1.0.6
-  * ==============================================================================
-  *    The MVCommons module (Aliased as MVC)
-  * ==============================================================================
-  * The MVCommons module is the main part of the plugin. It provides general
-  * functions that can be used to make it easier to write plugins, while
-  * maintaining compatibility with other plugins, because these functions need
-  * not be redefined.
-  *
-  * ==============================================================================
-  *    Stay Up To Date
-  * ==============================================================================
-  * I advise that you check regularly to see if the MVC plugin has been updated.
-  * Plugin updates will include things like bugfixes and new features, so it is
-  * highly recommended.
-  *
-  * You can get the latest versions of MVC via any of the following links'
-  * http://link.hudell.com/mvcommons
-  * http://dekyde.com/mvcommons
-  */
+/*:
+ * @plugindesc Great utility library that provides common-use and  
+ * simplified functions. Also expands default classes.
+ *
+ * @author Originally Zalerinian, Ramiro, Hudell, Dekita
+ *
+ * @help
+ * ==============================================================================
+ *    Introduction
+ * ==============================================================================
+ * The MVCommons (MVC) plugin is a Software Development Kit (SDK) intended to
+ * help plugin makers by providing a standard way to do common functions.
+ *
+ * This help file will explain the provided functions and what their purpose
+ * is.
+ *
+ * ==============================================================================
+ *    The MVCommons module (Aliased as MVC)
+ * ==============================================================================
+ * The MVCommons module is the main part of the plugin. It provides general
+ * functions that can be used to make it easier to write plugins, while
+ * maintaining compatibility with other plugins, because these functions need
+ * not be redefined.
+ *
+ * ==============================================================================
+ *    Stay Up To Date
+ * ==============================================================================
+ * We advise that you regularly check to ensure that the MVC plugin is upto date.
+ * Plugin updates will include things like bugfixes, code optimization, and of 
+ * course, new features, so it is highly recommended you have the latest version.
+ * 
+ * You can get the latest version by going to any of the following web addresses;
+ * http://link.hudell.com/mvcommons
+ * http://dekyde.com/mvcommons
+ */
 
-// Importing script
+/**
+ * Importing script
+ * Version is not set here due to being set within the included PluginManager
+ */
 var Imported = Imported || {};
-// The included PluginManager sets the version of the script itself.
 
-var MVCommons = {};
-// Shorter alias for MVCommons
+/**
+ * MVCommons is the namespace of this module, it holds all the common functions
+ * MVC is simple a shorter alias name for MVCommons - for ease of use
+ */
+var MVCommons = { };
 var MVC = MVCommons;
 
-(function ($) { // MVCommons
-  "use strict"; // activating always strict mode for code small
+/**
+ * MVCommons module
+ */
+(function($){ 
+  /**
+   * Use strict mode for better code smell
+   */
+  "use strict" 
+
+  /**
+   * MVC.VERSION
+   * A string containing the latest version number of this plugin.
+   * This is used when registering MVCommons with the plugin manager.
+   */
+  $.VERSION = "1.2.1"
+
+  /**
+   * MVC.VERSION_DATE
+   * A string containing the date the latest version was created.
+   * This is used when registering MVCommons with the plugin manager.
+   */
+  $.VERSION_DATE = "2015-10-27"
 
   //============================================================================
   // Private functions
   //============================================================================
-
+  
   /**
+   * [ private ] defaultGetter(name)
    * Generates a getter based on a name
    * See reader() for information about the default getter
    * @param name The name of the property.
@@ -73,6 +99,7 @@ var MVC = MVCommons;
   }
 
   /**
+   * [ private ] defaultSetter(name)
    * Generates a setter based on a name
    * See writer() for information about the default setter
    * @param name The name of the property.
@@ -95,55 +122,60 @@ var MVC = MVCommons;
   //============================================================================
 
   /**
+   * MVC.isArray(obj)
    * Checks if an object is an array
-   * @param o The object to check
-   * @return A boolean value representing if the object is or not an array
+   * @param obj The object to be checked 
+   * @return A boolean value representing if the object is an array or not
    */
-  function isArray(o) {
-      return Object.prototype.toString.apply(o) === '[object Array]';
+  function isArray(obj) {
+      return Object.prototype.toString.apply(obj) === '[object Array]';
   }
 
   /**
+   * MVC.isFunction(obj)
    * Checks if an object is a function
-   * @param functionToCheck The object to check
-   * @return A boolean value representing if the object is or not a function
+   * @param obj The object to be checked
+   * @return A boolean value representing if the object is a function or not 
    */
-  function isFunction(functionToCheck) {
-    var getType = {};
-    return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+  function isFunction(obj) {
+    return obj && {}.toString.call(obj) === '[object Function]';
   }
 
   /**
-    * Evaluates the given string as code, and strictly compares the result 
-    * to true. Since the string is evaluated as code, and is created
-    * as it is by creating an anonymous function to actually do the work,
-    * only variables in the global scope are accessible. All local variables
-    * are undefined. If you absolutely need a local variable to be
-    * comparable in this function, try putting it in your own global module.
-    * 
-    * For example, in all my scripts I define my module as Zale, and then
-    * have a sub module for each plugin, like so:
-    * 
-    * var Zale = Zale || {}; // Make sure to keep previous values
-    * Zale.NewPlugin = {}; // Create a space for plugin-specific values.
-    * 
-    * // Some time later...!
-    * Zale.NewPlugin.localVar = localVar;
-    * MVC.Boolean("Zale.NewPlugin.localVar");
-    * 
-    * @param str The string to compare to true.
-    */
+   * MVC.Boolean(str)
+   * @param str The string to compare to true.
+   * @return A boolean value representing if str is true or not
+   * 
+   * More Info:
+   * Evaluates the given string as code, and strictly compares the result 
+   * to true. Since the string is evaluated as code, and is created
+   * as it is by creating an anonymous function to actually do the work,
+   * only variables in the global scope are accessible. All local variables
+   * are undefined. If you absolutely need a local variable to be
+   * comparable in this function, try putting it in your own global module.
+   * 
+   * For example, in all my scripts I define my module as Zale, and then
+   * have a sub module for each plugin, like so:
+   * 
+   * var Zale = Zale || {}; // Make sure to keep previous values
+   * Zale.NewPlugin = {}; // Create a space for plugin-specific values.
+   * 
+   * // Some time later...!
+   * Zale.NewPlugin.localVar = localVar;
+   * MVC.Boolean("Zale.NewPlugin.localVar");
+   */
   function boolFunc(str) {
     return Function("return (" + str + " || false) === true")();
   }
 
   /**
-    * Loads text with Ajax synchronously.
-    * It takes path to file and an optional MIME type.
-    * @param filePath the path to the file
-    * @param mimeType a mimeType to parse, by default it checks the file extension
-    * @return the text of the file as an string
-    */
+   * MVC.ajaxLoadFile(filePath, mimeType)
+   * Loads text with Ajax synchronously.
+   * It takes path to file and an optional MIME type.
+   * @param filePath the path to the file
+   * @param mimeType [ optional ] A mimeType to parse, by default it uses file extension
+   * @return the text of the file as an string
+   */
   function ajaxLoadFile(filePath, mimeType) {
     var xmlhttp=new XMLHttpRequest();
     xmlhttp.open("GET",filePath,false);
@@ -160,18 +192,20 @@ var MVC = MVCommons;
   }
 
   /**
-    * Loads a file asynchronously (in the background), with custome callback
-    * support.
-    * @param filePath The full path to the file to load.
-    * @param mimeType A mimeType to parse, by default itt checks the file extension.
-    * @param onLoad A callback to call when the file loads successfully.
-    * @param onError A callback to call if there is an error laoding the file.
-    */
+   * MVC.ajaxLoadFile(filePath, mimeType)
+   * Loads a file asynchronously (in the background) - optional custom callbacks.
+   * @param filePath The full path to the file to load.
+   * @param mimeType [ optional ] A mimeType to parse, by default it uses file extension.
+   * @param onLoad   [ optional ] A callback to call when the file loads successfully.
+   * @param onError  [ optional ] A callback to call if there is an error loading the file.
+   */
   function ajaxLoadFileAsync(filePath, mimeType, onLoad, onError){
     var xhr = new XMLHttpRequest();
     var name = '$' + filePath.replace(/^.*(\\|\/|\:)/, '').replace(/\..*/, '');
     xhr.open('GET', filePath);
-    xhr.overrideMimeType('application/json');
+    if (mimeType && xmlhttp.overrideMimeType) {
+      xhr.overrideMimeType(mimeType);
+    }
     if(onLoad === undefined){
       onLoad = function(xhr, filePath, name) {
         if (xhr.status < 400) {
@@ -194,15 +228,14 @@ var MVC = MVCommons;
   }
 
   /**
-   * Provides an easy way to extend an rgss class
-   * If no parent is specified, Object will be used.
-   * The default constructor just does:
-   *
-   * parent.apply(this, arguments)
-   *
+   * MVC.extend(parent, constructor)
    * @param [Optional] parent The parent class
    * @param [Optional] constructor, a custom constructor
    * @return this function returns a new class prototype already cofigured.
+   * 
+   * Provides an easy way to extend an rgss class
+   * If no parent is specified, Object will be used.
+   * The default constructor just does 'parent.apply(this, arguments)'
    */
   function extend(/*parent , constructor */) {
     var constructor, parent;
@@ -227,43 +260,49 @@ var MVC = MVCommons;
   }
 
   /**
+   * MVC.reader(obj, name, getter)
+   * @param obj The object to add the reader property onto
+   * @param name The name of the reader porperty
+   * @param getter [optional] The Getter function
+   * 
    * Makes an easy way to make a reader (a variable you can read)
-   * By default it gets the value of this['_' + name ]
-   * @param value an object to add the reader
-   * @param name The name of the porperty
-   * @param [optional] getter the Getter function
+   * By default it gets the value of this['_' + name]
    */
-  function reader(value, name /*, getter */) {
-    Object.defineProperty(value, name, {
+  function reader(obj, name /*, getter */) {
+    Object.defineProperty(obj, name, {
       get: arguments.length > 2 ? arguments[2] : defaultGetter(name),
       configurable: true
     });
   }
 
   /**
+   * MVC.writer(obj, name, setter)
+   * @param obj The object to add the property
+   * @param name The property name
+   * @param setter [optional] The setter function
+   * 
    * Makes an easy way to define a writer (a setter to a variable)
    * By default it sets the function of the property this['_' + name] = value
    * It also calls a method this._refresh() if that method exists
-   * @param value The object to add the property
-   * @param name The property name
-   * @param setter [optional] The setter function
    */
-  function writer(value, name /*, setter*/) {
-    Object.defineProperty(value, name, {
+  function writer(obj, name /*, setter*/) {
+    Object.defineProperty(obj, name, {
       set: arguments.length > 2 ? arguments[2] : defaultSetter(name),
       configurable: true
     });
   }
 
   /**
-   * Makes an accessor (both getter and setter) of an object easily
-   * See writer() and reader() for information about default values.
-   * @param value The object to add the accessor
+   * MVC.accessor(obj, name, setter, getter)
+   * @param obj The object to add the accessor
    * @param name The property name
    * @param setter [optional] The setter function
    * @param getter [optional] The getter function
    * @see reader
    * @see writer
+   * 
+   * Makes an accessor (both getter and setter) of an object easily
+   * See writer() and reader() for information about default values.
    */
   function accessor(value, name /* , setter, getter */) {
     Object.defineProperty(value, name, {
@@ -274,18 +313,20 @@ var MVC = MVCommons;
   }
 
   /**
+   * MVC.getTag(text, tag, defaults)
+   * @param text The text where you want to search for.
+   * @param tag The name for the tag
+   * @param defaults [optional] an object containing default values if they are not found.
+   * @return an object containing params and text field.
+   * @note params is an array with indexed values after : 1, 2, 3...
+   * @note text is the text inside <tag></tag>
+   * @note tags are case insensitive.
+   * 
    * Gets a value from any of the following versions:
    * <tag: param1, param2, param3, param4, ...>text</param>
    * <tag: param1, param2>
    * <tag>text</tag>
    * <tag>
-   * tags are case insensitive.
-   * @param text The text where you want to search for.
-   * @param tag The name for the tag
-   * @param defaults an object containing default values if they are not found.
-   * @return an object containing a params and text field.
-   * @note params is an array with indexed values after : 1, 2, 3...
-   * @note text is the text inside <tag></tag>
    */
   function getTag(text, tag /*, defaults */) {
     var result = arguments.length > 2 ? $.shallowClone(arguments[2]) : {};
@@ -310,10 +351,11 @@ var MVC = MVCommons;
   }
 
   /**
-    * Gets a property value in a case insensitive way
-    * @param meta the list of loaded tags from an object
-    * @param propName the name of the property
-    * @return the value of the property
+   * MVC.getProp(meta, propName)
+   * Gets a property value in a case insensitive way
+   * @param meta the list of loaded tags from an object
+   * @param propName the name of the property
+   * @return the value of the property
    */
   function getProp(meta, propName){
     if (meta === undefined) return undefined;
@@ -327,10 +369,11 @@ var MVC = MVCommons;
   }
 
   /**
-    * Extacts notetags from all comments on all pages on the event
-    * And creates a list of tags on each page
-    * @param The event to extract the meta on
-  */
+   * MVC.extractEventMeta(event)
+   * @param The event to extract the meta on
+   * Extracts notetags from all comments on all pages on the event
+   * and creates a list of tags on each page.
+   */
   function extractEventMeta(event) {
     var the_event = event;
     if (the_event instanceof Game_Event) {
@@ -367,11 +410,14 @@ var MVC = MVCommons;
   }
 
   /**
-   * Deep clones an object and its properties.
-   * This function will crash when used on recursive objects.
-   * Numbers, Strings and Functions are not deep cloned.
+   * MVC.deepClone(obj)
    * @param obj The object to clone
    * @return The cloned object
+   * 
+   * Deep clones an object and its properties.
+   * This function will crash when used on recursive objects.
+   * Numbers, Strings and Functions are not deep cloned, thus, if they
+   * are used for the obj param, they will be returned without change.
    */
   function deepClone(obj) {
     var result;
@@ -388,11 +434,14 @@ var MVC = MVCommons;
   }
 
   /**
-   * Clones an object with the same properties as the original.
-   * This function does not clone properties.
-   * Numbers, Strings and Functions are not cloned.
+   * MVC.shallowClone(obj)
    * @param obj The object to clone
    * @return The cloned object
+   * 
+   * Clones an object with the same properties as the original.
+   * This function does not clone properties.
+   * Numbers, Strings and Functions are not shallow cloned, thus, if they
+   * are used for the obj param, they will be returned without change.
    */
   function shallowClone(obj) {
     var result;
@@ -409,13 +458,14 @@ var MVC = MVCommons;
   }
 
   /**
-   * Returns a new object with default attached objects if their properties
-   * are not found.
-   *
+   * MVC.options(obj, defaults, ...rest)
    * @param obj The object to clone
    * @param defaults default values if the properties are not found
    * @param rest [optional] [...] more default objects
    * @return a new object with all the properties
+   * 
+   * Returns a new object with default attached objects if the properties
+   * are not found within the obj passed to the function.
    */
   function options(obj, defaults /*, ...rest */) {
     var result = $.shallowClone(obj);
@@ -431,58 +481,49 @@ var MVC = MVCommons;
   }
 
   /**
-   * Allows to match your string as any of this to true:
-   * - true
-   * - yes
-   * - active
-   * - enabled
-   * - on
-   * - y
-   *
+   * MVC.naturalBoolean(text)
    * @param text The text to check.
    * @return true if the text matches any of that text, or false.
-   * @note Value is case insensitive.
+   * @note text is case insensitive.
+   * 
+   * Basically, this checks if the text string passed is equal to
+   * any of the following;  y, yes, true, on, active, enabled.
    */
   function naturalBoolean(text) {
-    if ( text.match(/(y(es)?)|true|on|active|enabled/gi) ) {
-      return true;
-    }
-    return false;
+    return text.match(/(y(es)?)|true|on|active|enabled/gi);
   }
 
   /**
-   * Evaluates a context with some safety measure to stop it from breaking all.
-   *
+   * MVC.safeEval(text)
    * @param text The text to evaluate.
    * @return The result of the expression or null if something fails.
-   *
+   * 
+   * Evaluates a context with some safety measure to stop it from breaking.
    */  
   function safeEval(text) {
     try {
       return eval(text);
     } catch(e) {
-      console.error(e); // print the error as error anyway
+      console.error(e); 
       return null;
     }
   };
   
   /**
-   * Converts degrees into radians.
-   *
+   * MVC.degToRad(deg)
    * @param deg Degrees to convert
    * @return Radiants equivalent to those degrees.
-   *
+   * Converts degrees into radians.
    */
   function degToRad(deg) {
     return deg * Math.PI / 180;
   }
   
   /**
-   * Converts radians into degrees.
-   *
+   * MVC.radToDeg(rad)
    * @param rad Radians to convert
    * @return Degrees equivalent to those radians.
-   *
+   * Converts radians into degrees.
    */
   function radToDeg(rad) {
     return rad * 180 / Math.PI;
@@ -492,46 +533,74 @@ var MVC = MVCommons;
   // Export section
   //============================================================================
 
-  // File manipulation
+  /**
+   * File manipulation
+   */ 
   $.ajaxLoadFile         = ajaxLoadFile;
   $.ajaxLoadFileAsync    = ajaxLoadFileAsync;
 
-  // Some math
+  /**
+   * Some math
+   */ 
   $.degToRad = degToRad;
   $.radToDeg = radToDeg;
 
-  // Class easily manipulation
+  /**
+   * Class easily manipulation
+   */ 
   $.extend           = extend;
   $.reader           = reader;
   $.writer           = writer;
   $.accessor         = accessor;
 
-  // Type checkers
+  /**
+   * Type checkers
+   */ 
   $.isArray          = isArray;
   $.isFunction       = isFunction;
   $.Boolean          = boolFunc;
   $.naturalBoolean   = naturalBoolean;
-  
-  // Object manipulation
+
+  /**
+   * Object manipulation
+   */ 
   $.shallowClone     = shallowClone;
   $.deepClone        = deepClone;
   $.options          = options;
 
-  // RPG objects utilities
+  /**
+   * RPG objects utilities
+   */ 
   $.getTag           = getTag;
   $.getProp          = getProp;
   $.extractEventMeta = extractEventMeta;
- 
-  // Evaling things
+
+  /**
+   * Evaling things
+   */ 
   $.safeEval = safeEval;
-  
+
+  /**
+   * End MVCommons main module
+   */ 
 })(MVCommons);
 
 
-
-(function($){ // PluginManager
+/**
+ * PluginManager
+ * This wrapper function contains enhancements to the PluginManager class
+ */ 
+(function($){
+  /**
+   * PluginManager._Imported
+   * Object to hold data for all imported plugins
+   */ 
   $._Imported = {};
 
+  /**
+   * PluginManager._printAuthorWithFullData(author)
+   * Prints author data to the console
+   */ 
   $._printAuthorWithFullData = function(author) {
     console.log("    %c%s%c <%c%s%c> @ %c%s%c.",
       "color: rgb(27, 108, 184);",
@@ -542,18 +611,14 @@ var MVC = MVCommons;
   };
 
   /**
-   * -----------------------------------------------------------------------
+   * PluginManager._printAuthorWithWebsite(object author)
+   * author: A Javascript object with name and website fields.
    *
-   *  PluginManager._printAuthorWithWebsite(object author)
-   *    author: A Javascript object with name and website fields.
+   * Prints the author's name and website url to the console.
+   * This function is only intended for internal use.
    *
-   *  Prints the author's name and website url to the console.
-   *  This function is only intended for internal use.
-   *
-   *  Returns:
-   *  This function does not return a value.
-   *
-    -----------------------------------------------------------------------
+   * Returns:
+   * This function does not return a value.
    */
   $._printAuthorWithWebsite = function(author) {
     console.log("    %c%s%c @ %c%s%c.",
@@ -564,17 +629,14 @@ var MVC = MVCommons;
   };
 
   /**
-   * -----------------------------------------------------------------------
+   * PluginManager._printAuthorWithEmail(object author)
+   * author: A Javascript object with name and email fields.
    *
-   *  PluginManager._printAuthorWithEmail(object author)
-   *    author: A Javascript object with name and email fields.
+   * Prints the author's name and email to the console.
+   * This function is only intended for internal use.
    *
-   *  Prints the author's name and email to the console.
-   *  This function is only intended for internal use.
-   *
-   *  Returns:
-   *  This function does not return a value.
-   * -----------------------------------------------------------------------
+   * Returns:
+   * This function does not return a value.
    */
   $._printAuthorWithEmail = function(author) {
     console.log("    %c%s%c <%c%s%c>.",
@@ -584,20 +646,17 @@ var MVC = MVCommons;
   };
 
   /**
-  // -----------------------------------------------------------------------
-  //
-  //  PluginManager._printAuthorWithFullData(object author)
-  //    author: author can be a string or a Javascript object with a name,
-  //            and optional email, and website fields.
-  //
-  //  Prints the author's name, email, and website url to the console. If
-  //  author is a JS object and does not have at least a name field, the
-  //  function will throw an error.
-  //  This function is only intended for internal use.
-  //
-  //  Returns:
-  //  This function does not return a value.
-   * -----------------------------------------------------------------------
+   * PluginManager._printAuthorWithFullData(object author)
+   * author: author can be a string or a Javascript object with a name,
+   *         and optional email, and website fields.
+   *
+   * Prints the author's name, email, and website url to the console. If
+   * author is a JS object and does not have at least a name field, the
+   * function will throw an error.
+   * This function is only intended for internal use.
+   *
+   * Returns:
+   * This function does not return a value.
    */
   $._printAuthor = function(pluginName, author) {
     if (typeof author == 'string') {
@@ -621,18 +680,15 @@ var MVC = MVCommons;
   };
 
   /**
-   * -----------------------------------------------------------------------
+   * PluginManager.author(string key)
+   * key: The key for a script's entry. If the given key was not
+   *      registered with the PluginManager, the function fails.
    *
-   *  PluginManager.author(string key)
-   *    key: The key for a script's entry. If the given key was not
-   *         registered with the PluginManager, the function fails.
+   * Returns a list of authors who created the script.
    *
-   *   Returns a list of authors who created the script.
-   *
-   *  Returns:
-   *  This function returns a string on success.
-   *  This function returns false on failure.
-   * -----------------------------------------------------------------------
+   * Returns:
+   * This function returns a string on success.
+   * This function returns false on failure.
    */
   $.author = function(key) {
     if(this.imported(key)){
@@ -642,25 +698,21 @@ var MVC = MVCommons;
   };
 
   /**
-   * -----------------------------------------------------------------------
+   * PluginManager.date(string key, boolean asString)
+   * key: The key for a script's entry. If the given key was not
+   *      registered with the PluginManager, the script fails.
    *
-   *  PluginManager.date(string key, boolean asString)
-   *    key:      The key for a script's entry. If the given key was not
-   *              registered with the PluginManager, the script fails.
+   * asString: Optional. If true, the date will be returned at the
+   *           string used when registering the plugin.
    *
-   *    asString: Optional. If true, the date will be returned at the
-   *              string used when registering the plugin.
+   * Returns the date the script was last modified on. If asString is
+   * true, return the date as the date string that was given to the
+   * register function.
    *
-   *   Returns the date the script was last modified on. If asString is
-   *   true, return the date as the date string that was given to the
-   *   register function.
-   *
-   *  Returns:
-   *  This script returns a Date object if asString is false and is
-   *    successful.
-   *  This function returns a string if asString is true and is successful.
-   *  This function returns false on failure.
-   * -----------------------------------------------------------------------
+   * Returns:
+   * This function returns a Date object if asString is false and is successful.
+   * This function returns a string if asString is true and is successful.
+   * This function returns false on failure.
    */
   $.date = function(key, asString) {
     if(this.imported(key)){
@@ -674,22 +726,18 @@ var MVC = MVCommons;
   };
 
   /**
-   * -----------------------------------------------------------------------
+   * PluginManager.description(string key)
+   * key: The key for a plugin's entry. If the given key was not
+   *      registered with the PluginManager, the function fails.
    *
-   *  PluginManager.description(string key)
-   *    key: The key for a plugin's entry. If the given key was not
-   *         registered with the PluginManager, the function fails.
+   * Gets the description of the plugin with the given key. If the given
+   * key was not registered with the PluginManager, the function will
+   * attempt to get the description of a plugin in the plugins.js file
+   * where the name is the same as the given key.
    *
-   *   Gets the description of the plugin with the given key. If the given
-   *    key was not registered with the PluginManager, the function will
-   *    attempt to get the description of a plugin in the plugins.js file
-   *    where the name is the same as the given key.
-   *
-   *  Returns:
-   *  This function returns a string on success.
-   *  This function returns false on failure.
-   *
-   * -----------------------------------------------------------------------
+   * Returns:
+   * This function returns a string on success.
+   * This function returns false on failure.
    */
   $.description = function(key) {
     if(this.imported(key)){
@@ -706,17 +754,15 @@ var MVC = MVCommons;
 
 
   /**
-   * -----------------------------------------------------------------------
-   *  PluginManager.getBasicPlugin(string key)
-   *    key: The key for a plugin's entry. This is the name of the plugin
-   *         as it is in the plugins.js file.
+   * PluginManager.getBasicPlugin(string key)
+   * key: The key for a plugin's entry. This is the name of the plugin
+   *      as it is in the plugins.js file.
    *
-   *  Returns the plugin's data object from the plugins.js file.
+   * Returns the plugin's data object from the plugins.js file.
    *
-   *  Returns:
-   *  This function returns a Javascript object on success.
-   *  This function returns false on failure.
-   * -----------------------------------------------------------------------
+   * Returns:
+   * This function returns a Javascript object on success.
+   * This function returns false on failure.
    */
   $.getBasicPlugin = function(key) {
     for (var i = 0; i < $plugins.length; i++) {
@@ -728,18 +774,16 @@ var MVC = MVCommons;
   };
 
   /**
-   * -----------------------------------------------------------------------
-   *  PluginManager.getPlugin(string key)
-   *    key: The key for a plugin's entry. If the given key was not
-   *         registered with the PluginManager, the function fails.
+   * PluginManager.getPlugin(string key)
+   * key: The key for a plugin's entry. If the given key was not
+   *      registered with the PluginManager, the function fails.
    *
-   *  Returns the plugin's data object, if it was registered to the
-   *  PluginManager.
+   * Returns the plugin's data object, if it was registered to the
+   * PluginManager.
    *
-   *  Returns:
-   *  This function returns a Javascript object on success.
-   *  This function returns false on failure.
-   * -----------------------------------------------------------------------
+   * Returns:
+   * This function returns a Javascript object on success.
+   * This function returns false on failure.
    */
   $.getPlugin = function(key) {
     if(this.imported(key)){
@@ -749,19 +793,15 @@ var MVC = MVCommons;
   };
 
   /**
-   * -----------------------------------------------------------------------
+   * PluginManager.imported(string key)
+   * key: The key for a plugin's entry. If the given key was not
+   *      registered with the PluginManager, the function fails.
    *
-   *  PluginManager.imported(string key)
-   *    key: The key for a plugin's entry. If the given key was not
-   *         registered with the PluginManager, the function fails.
+   * Check if a plugin is imported.
    *
-   *   Check if a plugin is imported.
-   *
-   *  Returns:
-   *  This function returns true on success.
-   *  This function returns false on failure.
-   *
-   * -----------------------------------------------------------------------
+   * Returns:
+   * This function returns true on success.
+   * This function returns false on failure.
    */
   $.imported = function(key) {
     if(this._Imported[key]){
@@ -771,13 +811,11 @@ var MVC = MVCommons;
   };
 
   /**
-   * -----------------------------------------------------------------------
    * PluginManager.printPlugin(string key)
-   *   key: The key for a plugin's entry. If the given key was not
-   *        registered with the PluginManager, the function fails.
-   *
    * Logs a plugin's information to the console.
-   * -----------------------------------------------------------------------
+   * 
+   * key: The key for a plugin's entry. If the given key was not
+   *      registered with the PluginManager, the function fails.
    */
   $.printPlugin = function (key) {
     if (console) {
@@ -802,51 +840,45 @@ var MVC = MVCommons;
   };
 
   /**
-   * -----------------------------------------------------------------------
+   * PluginManager.register(key, version, desc, author, date, required, exit)
+   * key:        The key to register. If this key is already registered,
+   *             the function fails. ( string )
    *
-   *  PluginManager.register(string key, string version, string desc,
-   *      string[] author, string date, string[] required, boolean exit)
-   *    key:        The key to register. If this key is already registered,
-   *                the function fails.
+   * version:    The version to record for the plugin. ( string )
    *
-   *    version:    The version to record for the plugin.
+   * desc:       The description of the plugin. ( string )
    *
-   *    desc:       The description of the plugin.
+   * author:     A string, or array of strings, listing the author(s) of
+   *             the plugin. ( string[] )
    *
-   *    author:     A string, or array of strings, listing the author(s) of
-   *                the plugin.
+   * date:       A string representing the date the plugin was last
+   *             updated. ( string )
    *
-   *    date:       A string representing the date the plugin was last
-   *                updated.
+   * required:   Optional. A string, or array of strings, listing the
+   *             text keys for plugins that are required for this one to
+   *             properly work. ( string[] )
    *
-   *    required:   Optional. A string, or array of strings, listing the
-   *                text keys for plugins that are required for this one to
-   *                properly work.
+   * exit:       Optional. If set to true and a required plugin is
+   *             missing, the game will stop. If this is set to false,
+   *             an error report is made and the game continues. It is
+   *             up to the plugin to disable itself in this scenario. (boolean)
    *
-   *    exit:       Optional. If set to true and a required plugin is
-   *                missing, the game will stop. If this is set to false,
-   *                an error report is made and the game continues. It is
-   *                up to the plugin to disable itself in this scenario.
+   * This function will register a plugin with the PluginManager. It can
+   * ensure that any required scripts are included in the game, and stop
+   * it if one or more are missing, telling you what must be added.
+   * Additionally, if exit is false and required scripts are missing,
+   * the game will continue running and the plugin attempting to register
+   * will be told to disable itself, by received "undefined" as a return
+   * value, rather than false.
    *
-   *  This function will register a plugin with the PluginManager. It can
-   *  ensure that any required scripts are included in the game, and stop
-   *  it if one or more are missing, telling you what must be added.
-   *  Additionally, if exit is false and required scripts are missing,
-   *  the game will continue running and the plugin attempting to register
-   *  will be told to disable itself, by received "undefined" as a return
-   *  value, rather than false.
+   * Date may be formatted using any of the formats on the following page,
+   * but "YYYY-MM-DD" is the preferred format. All times will be set to 0
+   * by the register function.
+   * Date Formats:   http: *www.w3schools.com/js/js_date_formats.asp
    *
-   *  Date may be formatted using any of the formats on the following page,
-   *  but "YYYY-MM-DD" is the preferred format. All times will be set to 0
-   *  by the register function.
-   *  Date Formats:   http: *www.w3schools.com/js/js_date_formats.asp
-   *
-   *  Returns:
-   *  This function returns true on success.
-   *  This function returns false on failure.
-   *  This function returns undefined if a required plugin is missing and
-   *    exit is false.
-   * -----------------------------------------------------------------------
+   * Returns:
+   * This function returns true on success and false on failure, OR, 
+   * returns undefined if a required plugin is missing and exit is false.
    */
   $.register = function(key, version, desc, author, date, required, exit) {
     if(key === undefined || this.imported(key)){
@@ -887,17 +919,14 @@ var MVC = MVCommons;
   };
 
   /**
-   * -----------------------------------------------------------------------
-   *  PluginManager.setDate(string date)
-   *    date: The string format of the date to use.
+   * PluginManager.setDate(string date)
+   * date: The string format of the date to use.
    *
-   *  The give date string will be converted into a date object, and the
-   *  time components will be set to 0.
+   * The give date string will be converted into a date object, and the
+   * time components will be set to 0.
    *
    * Returns:
    * This function returns a date object.
-   *
-   * -----------------------------------------------------------------------
    */
   $.setDate = function(date) {
     var d = new Date(date);
@@ -908,38 +937,34 @@ var MVC = MVCommons;
   };
 
   /**
-   * -----------------------------------------------------------------------
+   * PluginManager.version(key, operation, version)
+   * key:       The key for a plugin's entry. If the given key was not
+   *            registered with the PluginManager, the function fails.
    *
-   *  PluginManager.version(key, operation, version)
-   *    key:       The key for a plugin's entry. If the given key was not
-   *               registered with the PluginManager, the function fails.
+   * operation: Optional. The operation to perform when comparing
+   *            versions. A table of operations is listed below.
+   *            The syntax is intended to be read,
+   *            "Registered version is <operation> given version".
    *
-   *    operation: Optional. The operation to perform when comparing
-   *               versions. A table of operations is listed below.
-   *               The syntax is intended to be read,
-   *               "Registered version is <operation> given version".
+   * version:   Optional. The version to compare with that that is
+   *            registered to the PluginManager.
    *
-   *    version:   Optional. The version to compare with that that is
-   *               registered to the PluginManager.
+   * Compares the version of the plugin with the given key with the given
+   * version. Version should be a string.
+   * operation may be any of the following:
+   *   USE:     MEANING:
+   *   >=       Greater than or equal to
+   *   >        Greater than
+   *   <=       Less than or equal to
+   *   <        Less than
+   *   ==       equal to
    *
-   *   Compares the version of the plugin with the given key with the given
-   *    version. Version should be a string.
-   *    operation may be any of the following:
-   *      USE            MEANING
-   *      >=      Greater than or equal to
-   *      >       Greater than
-   *      <=      Less than or equal to
-   *      <       Less than
-   *      ==      equal to
-   *
-   *  Returns:
-   *  This function returns a string when a valid key is given and no
-   *    optional arguments are used.
-   *  This function returns the value of the comparison if the optional
-   *    arguments are used.
-   *  This function returns false on failure.
-   *
-   * -----------------------------------------------------------------------
+   * Returns:
+   * This function returns a string when a valid key is given and no
+   * optional arguments are used.
+   * This function returns the value of the comparison if the optional
+   * arguments are used.
+   * This function returns false on failure.
    */
   $.version = function(key, operation, version) {
     if(this.imported(key)) {
@@ -972,20 +997,16 @@ var MVC = MVCommons;
   };
 
   /**
-   * -----------------------------------------------------------------------
+   * PluginManager.getParamList(string partialPluginName)
+   * partialPluginName: Part of the name of the plugin that you want to
+   * get the params from
    *
-   *  PluginManager.getParamList(string partialPluginName)
-   *   partialPluginName: Part of the name of the plugin that you want to
-   *    get the params from
+   * Loads all the params from all plugins where the name match the one specified
+   * in partialPluginName.
    *
-   *   Loads all the params from all plugins where the name match the one specified
-   *    in partialPluginName.
-   *
-   *  Returns:
-   *  This function returns an array with one object for each plugin it finds
-   *    The object will have a different property for each param
-   *
-   * -----------------------------------------------------------------------
+   * Returns:
+   * This function returns an array with one object for each plugin it finds
+   * The object will have a different property for each param
    */
   $.getParamList = function(partialPluginName) {
     var list = [];
@@ -994,96 +1015,144 @@ var MVC = MVCommons;
         list.push(PluginManager._parameters[pluginName]);
       }
     }
-
     return list;
   };
+  /**
+   * End PluginManager wrapper
+   */
 })(PluginManager);
 
-(function($){ // Number
-  //============================================================================
-  // Public functions
-  //============================================================================
 
+/**
+ * Number.prototype
+ * This wrapper function contains enhancements to the Number class
+ */ 
+(function($){ // Number
   /**
-    * Drops anything after the 12th decimal place of the number, fixing javascript's issue with decimal operations.
-    * Examples:
-    *   Math.ceil((0.2 + 0.1) * 10) == 4
-    *   Math.ceil((0.2 + 0.1).fix() * 10) == 3
-    * @return the fixed number.
+   * Drops anything after the 12th decimal place of the number, thus, 
+   * fixing javascript's issue with decimal operations.
+   * Examples:
+   *   Math.ceil((0.2 + 0.1) * 10) == 4
+   *   Math.ceil((0.2 + 0.1).fix() * 10) == 3
+   * @return the fixed number.
    */
-  function fix(){
+  $.fix = function(){
     return (parseFloat(this.toPrecision(12)));
   }
 
   /**
-    * @return the largest integer less than or equal to the number.
+   * @return the largest integer less than or equal to the number.
    */
-  function floor(){
+  $.floor = function(){
     return Math.floor(this.fix());
   }
 
   /**
-    * @return the smallest integer greater than or equal to the number.
+   * @return the smallest integer greater than or equal to the number.
    */
-  function ceil(){
+  $.ceil = function(){
     return Math.ceil(this.fix());
   }
 
   /**
-    * @return the value of the number rounded to the nearest integer.
+   * @return the value of the number rounded to the nearest integer.
    */
-  function round(){
+  $.round = function(){
     return Math.round(this.fix());
   }
 
   /**
-    * @return the absolute value
+   * @return the absolute value
    */
-  function abs(){
+  $.abs = function(){
     return Math.abs(this);
   }
-  //============================================================================
-  // Export section
-  //============================================================================
 
-  $.prototype.fix = fix;
-  $.prototype.floor = floor;
-  $.prototype.ceil = ceil;
-  $.prototype.round = round;
-  $.prototype.abs = abs;
-})(Number);
+  /**
+   * End Number.prototype wrapper
+   */
+})(Number.prototype);
 
-(function($){ // Bitmap.prototype
+
+/**
+ * Bitmap.prototype
+ * This wrapper function contains enhancements to the Bitmap class
+ */ 
+(function($){
+  /**
+   * Bitmap.prototype.copySection(x,y,w,h)
+   * @param x The x position to begin copying from
+   * @param y The y position to begin copying from
+   * @param w The width to copy onto the new bitmap
+   * @param h The height to copy onto the new bitmap
+   * @return A new bitmap created from the region specified.
+   */
   $.copySection = function(x, y, w, h) {
     var ret = new Bitmap(w, h);
     ret.blt(this, x, y, w, h, 0, 0, w, h);
     return ret;
   };
+  /**
+   * End Bitmap.prototype wrapper
+   */
 })(Bitmap.prototype);
 
-(function($){ // ImageManager
+
+/**
+ * ImageManager
+ * This wrapper function contains enhancements to the ImageManager class
+ */ 
+(function($){ 
+  /**
+   * ImageManager.loadImage(filePath, hue, smooth)
+   * @param filePath The path of the image to load
+   * @param hue The hue change to perform on the image
+   * @param smooth The smooth boolean for the bitmap
+   * @return A new bitmap from the filePath specified
+   */
   $.loadImage = function(filePath, hue, smooth) {
     var folder = filePath.substring(0, filePath.lastIndexOf("/") + 1);
     var file = filePath.substring(folder.length);
     return this.loadBitmap(folder, file, hue, smooth);
   };
 
+  /**
+   * ImageManager.loadIcon(index)
+   * @param index The icon index to return as a single bitmap
+   * @return A new bitmap containing only the icon specified
+   */
   $.loadIcon = function(index) {
-    var icons = this.loadSystem("IconSet");
+    var ic = this.loadSystem("IconSet");
     var pw = Window_Base._iconWidth;
     var ph = Window_Base._iconHeight;
     var sx = index % 16 * pw;
     var sy = Math.floor(index / 16) * ph;
-    return icons.copySection(sx, sy, pw, ph);
+    return ic.copySection(sx, sy, pw, ph);
   };
+  /**
+   * End ImageManager wrapper
+   */
 })(ImageManager);
 
-// Storage Manager
+
+/**
+ * StorageManager
+ * This wrapper function contains enhancements to the StorageManager class
+ */ 
 (function($) {
+  /**
+   * StorageManager.localContentPath()
+   * 
+   */
   $.localContentPath = function() {
-    return this.localFileDirectoryPath().substring(0, this.localFileDirectoryPath().lastIndexOf("/") - 4);
+    var id = this.localFileDirectoryPath().lastIndexOf("/") - 4;
+    return this.localFileDirectoryPath().substring(0, id);
   };
 
+  /**
+   * StorageManager.storageFileExists(filePath, isRegex)
+   * 
+   */
   $.storageFileExists = function(filePath, isRegex) {
     if(this.isLocalMode()) {
       var fs = require('fs');
@@ -1097,6 +1166,10 @@ var MVC = MVCommons;
     }
   };
 
+  /**
+   * StorageManager.directoryExists(dirPath)
+   * 
+   */
   $.directoryExists = function(dirPath) {
     if(this.isLocalMode()) {
       try {
@@ -1110,6 +1183,10 @@ var MVC = MVCommons;
     }
   };
 
+  /**
+   * StorageManager.removeDirectory(dirPath)
+   * 
+   */
   $.removeDirectory = function(dirPath) {
     if(this.isLocalMode()) {
       try {
@@ -1128,6 +1205,10 @@ var MVC = MVCommons;
     }
   };
 
+  /**
+   * StorageManager.storageSaveFile(filePath, json)
+   * 
+   */
   $.storageSaveFile = function(filePath, json) {
     var data = undefined;
     if(this.isLocalMode()) {
@@ -1142,6 +1223,10 @@ var MVC = MVCommons;
     }
   };
 
+  /**
+   * StorageManager.storageLoadFile(filePath)
+   * 
+   */
   $.storageLoadFile = function(filePath) {
     if(this.isLocalMode()) {
       var fs = require('fs');
@@ -1162,6 +1247,10 @@ var MVC = MVCommons;
     }
   };
 
+  /**
+   * StorageManager.storageRemoveFile(filePath)
+   * 
+   */
   $.storageRemoveFile = function(filePath) {
     if(this.isLocalMode()) {
       var fs = require('fs');
@@ -1178,9 +1267,16 @@ var MVC = MVCommons;
       }
     }
   };
+  /**
+   * End StorageManager wrapper
+   */
 })(StorageManager);
 
-// DataManager
+
+/**
+ * DataManager
+ * This wrapper function contains enhancements to the DataManager class
+ */ 
 (function($){
   $.ajaxLoadFile      = MVC.ajaxLoadFile;
   $.ajaxLoadFileAsync = MVC.ajaxLoadFileAsync;
@@ -1191,10 +1287,21 @@ var MVC = MVCommons;
   $.storageSaveFile   = StorageManager.storageSaveFile;
   $.storageLoadFile   = StorageManager.storageLoadFile;
   $.storageRemoveFile = StorageManager.storageRemoveFile;
+  /**
+   * End DataManager wrapper
+   */
 })(DataManager);
 
 
+/**
+ * This wrapper function contains information on this plugins 
+ * authors and also registers the plugin with the PluginManager.
+ */ 
 (function() {
+  /**
+   * authors
+   * Holds data on this plugins authors
+   */
   var authors = [{
     email: "dekita@dekyde.com",
     name: "David Bow (Dekita)",
@@ -1212,6 +1319,15 @@ var MVC = MVCommons;
     name: "Drew Ritter (Zalerinian)",
     website: "http://www.razelon.com"
   }];
-  PluginManager.register("PluginManagement", "1.0.0", Imported["PluginManagement"], authors, "2015-10-07");
-  PluginManager.register("MVCommons", "1.2.0", "Great utility library to allow common usage", authors, "2015-10-24");
+  /**
+   * Performs the registration process for this plugin
+   */
+  PluginManager.register("PluginManagement","1.0.0",Imported["PluginManagement"],authors,"2015-10-07");
+  PluginManager.register("MVCommons",MVC.VERSION,"Great utility library to allow common usage",authors,MVC.VERSION_DATE);
+  /**
+   * End wrapper function
+   */
 })();
+/**
+ * End MVCommons Plugin
+ */
