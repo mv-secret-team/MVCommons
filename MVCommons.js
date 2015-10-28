@@ -91,6 +91,7 @@ var MVC = MVCommons;
    * See reader() for information about the default getter
    * @param name The name of the property.
    * @return a function than can be used as a getter.
+   * @private
    */
   function defaultGetter(name) {
     return function () {
@@ -104,6 +105,7 @@ var MVC = MVCommons;
    * See writer() for information about the default setter
    * @param name The name of the property.
    * @return a function than can be used as a setter.
+   * @private
    */
   function defaultSetter(name) {
     return function (value) {
@@ -592,14 +594,21 @@ var MVC = MVCommons;
  */ 
 (function($){
   /**
+   * [ private ]
    * PluginManager._Imported
    * Object to hold data for all imported plugins
+   * @private
    */ 
   $._Imported = {};
 
   /**
+   * [ private ]
    * PluginManager._printAuthorWithFullData(author)
+   * 
+   * @param author an object containing many author attributes.
+   * 
    * Prints author data to the console
+   * @private
    */ 
   $._printAuthorWithFullData = function(author) {
     console.log("    %c%s%c <%c%s%c> @ %c%s%c.",
@@ -611,14 +620,16 @@ var MVC = MVCommons;
   };
 
   /**
+   * [ private ]
    * PluginManager._printAuthorWithWebsite(object author)
-   * author: A Javascript object with name and website fields.
-   *
+   * 
+   * @param author A Javascript object with name and website fields.
+   * 
+   * @return This function does not return a value.
+   * @private
+   * 
    * Prints the author's name and website url to the console.
    * This function is only intended for internal use.
-   *
-   * Returns:
-   * This function does not return a value.
    */
   $._printAuthorWithWebsite = function(author) {
     console.log("    %c%s%c @ %c%s%c.",
@@ -629,14 +640,16 @@ var MVC = MVCommons;
   };
 
   /**
+   * [ private ]
    * PluginManager._printAuthorWithEmail(object author)
-   * author: A Javascript object with name and email fields.
+   * 
+   * @param author A Javascript object with name and email fields.
    *
+   * @return This function does not return a value.
+   * @private
+   * 
    * Prints the author's name and email to the console.
-   * This function is only intended for internal use.
-   *
-   * Returns:
-   * This function does not return a value.
+   * This function is only intended for internal use. 
    */
   $._printAuthorWithEmail = function(author) {
     console.log("    %c%s%c <%c%s%c>.",
@@ -646,17 +659,18 @@ var MVC = MVCommons;
   };
 
   /**
+   * [ private ]
    * PluginManager._printAuthorWithFullData(object author)
    * author: author can be a string or a Javascript object with a name,
    *         and optional email, and website fields.
+   *
+   * @return This function does not return a value.
+   * @private
    *
    * Prints the author's name, email, and website url to the console. If
    * author is a JS object and does not have at least a name field, the
    * function will throw an error.
    * This function is only intended for internal use.
-   *
-   * Returns:
-   * This function does not return a value.
    */
   $._printAuthor = function(pluginName, author) {
     if (typeof author == 'string') {
