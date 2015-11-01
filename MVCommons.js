@@ -10,7 +10,7 @@
 //=============================================================================
 
 /*:
- * @plugindesc Great utility library that provides common-use and  
+ * @plugindesc Great utility library that provides common-use and
  * simplified functions. Also expands default classes.
  *
  * @author Originally Zalerinian, Ramiro, Hudell, Dekita
@@ -37,9 +37,9 @@
  *    Stay Up To Date
  * ==============================================================================
  * We advise that you regularly check to ensure that the MVC plugin is upto date.
- * Plugin updates will include things like bugfixes, code optimization, and of 
+ * Plugin updates will include things like bugfixes, code optimization, and of
  * course, new features, so it is highly recommended you have the latest version.
- * 
+ *
  * You can get the latest version by going to any of the following web addresses;
  * http://link.hudell.com/mvcommons
  * http://dekyde.com/mvcommons
@@ -61,18 +61,18 @@ var MVC = MVCommons;
 /**
  * MVCommons module
  */
-(function($){ 
+(function($){
   /**
    * Use strict mode for better code smell
    */
-  "use strict" 
+  "use strict"
 
   /**
    * MVC.VERSION
    * A string containing the latest version number of this plugin.
    * This is used when registering MVCommons with the plugin manager.
    */
-  $.VERSION = "1.2.1"
+  $.VERSION = "1.2.2"
 
   /**
    * MVC.VERSION_DATE
@@ -84,7 +84,7 @@ var MVC = MVCommons;
   //============================================================================
   // Private functions
   //============================================================================
-  
+
   /**
    * [ private ] defaultGetter(name)
    * Generates a getter based on a name
@@ -126,7 +126,7 @@ var MVC = MVCommons;
   /**
    * MVC.isArray(obj)
    * Checks if an object is an array
-   * @param obj The object to be checked 
+   * @param obj The object to be checked
    * @return A boolean value representing if the object is an array or not
    */
   function isArray(obj) {
@@ -137,7 +137,7 @@ var MVC = MVCommons;
    * MVC.isFunction(obj)
    * Checks if an object is a function
    * @param obj The object to be checked
-   * @return A boolean value representing if the object is a function or not 
+   * @return A boolean value representing if the object is a function or not
    */
   function isFunction(obj) {
     return obj && {}.toString.call(obj) === '[object Function]';
@@ -147,21 +147,21 @@ var MVC = MVCommons;
    * MVC.Boolean(str)
    * @param str The string to compare to true.
    * @return A boolean value representing if str is true or not
-   * 
+   *
    * More Info:
-   * Evaluates the given string as code, and strictly compares the result 
+   * Evaluates the given string as code, and strictly compares the result
    * to true. Since the string is evaluated as code, and is created
    * as it is by creating an anonymous function to actually do the work,
    * only variables in the global scope are accessible. All local variables
    * are undefined. If you absolutely need a local variable to be
    * comparable in this function, try putting it in your own global module.
-   * 
+   *
    * For example, in all my scripts I define my module as Zale, and then
    * have a sub module for each plugin, like so:
-   * 
+   *
    * var Zale = Zale || {}; // Make sure to keep previous values
    * Zale.NewPlugin = {}; // Create a space for plugin-specific values.
-   * 
+   *
    * // Some time later...!
    * Zale.NewPlugin.localVar = localVar;
    * MVC.Boolean("Zale.NewPlugin.localVar");
@@ -179,6 +179,7 @@ var MVC = MVCommons;
    * @return the text of the file as an string
    */
   function ajaxLoadFile(filePath, mimeType) {
+    mimeType = mimeType || "application/json";
     var xmlhttp=new XMLHttpRequest();
     xmlhttp.open("GET",filePath,false);
     if (mimeType && xmlhttp.overrideMimeType) {
@@ -202,6 +203,7 @@ var MVC = MVCommons;
    * @param onError  [ optional ] A callback to call if there is an error loading the file.
    */
   function ajaxLoadFileAsync(filePath, mimeType, onLoad, onError){
+    mimeType = mimeType || "application/json";
     var xhr = new XMLHttpRequest();
     var name = '$' + filePath.replace(/^.*(\\|\/|\:)/, '').replace(/\..*/, '');
     xhr.open('GET', filePath);
@@ -234,7 +236,7 @@ var MVC = MVCommons;
    * @param [Optional] parent The parent class
    * @param [Optional] constructor, a custom constructor
    * @return this function returns a new class prototype already cofigured.
-   * 
+   *
    * Provides an easy way to extend an rgss class
    * If no parent is specified, Object will be used.
    * The default constructor just does 'parent.apply(this, arguments)'
@@ -266,7 +268,7 @@ var MVC = MVCommons;
    * @param obj The object to add the reader property onto
    * @param name The name of the reader porperty
    * @param getter [optional] The Getter function
-   * 
+   *
    * Makes an easy way to make a reader (a variable you can read)
    * By default it gets the value of this['_' + name]
    */
@@ -282,7 +284,7 @@ var MVC = MVCommons;
    * @param obj The object to add the property
    * @param name The property name
    * @param setter [optional] The setter function
-   * 
+   *
    * Makes an easy way to define a writer (a setter to a variable)
    * By default it sets the function of the property this['_' + name] = value
    * It also calls a method this._refresh() if that method exists
@@ -302,7 +304,7 @@ var MVC = MVCommons;
    * @param getter [optional] The getter function
    * @see reader
    * @see writer
-   * 
+   *
    * Makes an accessor (both getter and setter) of an object easily
    * See writer() and reader() for information about default values.
    */
@@ -323,7 +325,7 @@ var MVC = MVCommons;
    * @note params is an array with indexed values after : 1, 2, 3...
    * @note text is the text inside <tag></tag>
    * @note tags are case insensitive.
-   * 
+   *
    * Gets a value from any of the following versions:
    * <tag: param1, param2, param3, param4, ...>text</param>
    * <tag: param1, param2>
@@ -415,7 +417,7 @@ var MVC = MVCommons;
    * MVC.deepClone(obj)
    * @param obj The object to clone
    * @return The cloned object
-   * 
+   *
    * Deep clones an object and its properties.
    * This function will crash when used on recursive objects.
    * Numbers, Strings and Functions are not deep cloned, thus, if they
@@ -439,7 +441,7 @@ var MVC = MVCommons;
    * MVC.shallowClone(obj)
    * @param obj The object to clone
    * @return The cloned object
-   * 
+   *
    * Clones an object with the same properties as the original.
    * This function does not clone properties.
    * Numbers, Strings and Functions are not shallow cloned, thus, if they
@@ -465,7 +467,7 @@ var MVC = MVCommons;
    * @param defaults default values if the properties are not found
    * @param rest [optional] [...] more default objects
    * @return a new object with all the properties
-   * 
+   *
    * Returns a new object with default attached objects if the properties
    * are not found within the obj passed to the function.
    */
@@ -487,7 +489,7 @@ var MVC = MVCommons;
    * @param text The text to check.
    * @return true if the text matches any of that text, or false.
    * @note text is case insensitive.
-   * 
+   *
    * Basically, this checks if the text string passed is equal to
    * any of the following;  y, yes, true, on, active, enabled.
    */
@@ -499,18 +501,18 @@ var MVC = MVCommons;
    * MVC.safeEval(text)
    * @param text The text to evaluate.
    * @return The result of the expression or null if something fails.
-   * 
+   *
    * Evaluates a context with some safety measure to stop it from breaking.
-   */  
+   */
   function safeEval(text) {
     try {
       return eval(text);
     } catch(e) {
-      console.error(e); 
+      console.error(e);
       return null;
     }
   };
-  
+
   /**
    * MVC.degToRad(deg)
    * @param deg Degrees to convert
@@ -520,7 +522,7 @@ var MVC = MVCommons;
   function degToRad(deg) {
     return deg * Math.PI / 180;
   }
-  
+
   /**
    * MVC.radToDeg(rad)
    * @param rad Radians to convert
@@ -537,19 +539,19 @@ var MVC = MVCommons;
 
   /**
    * File manipulation
-   */ 
+   */
   $.ajaxLoadFile         = ajaxLoadFile;
   $.ajaxLoadFileAsync    = ajaxLoadFileAsync;
 
   /**
    * Some math
-   */ 
+   */
   $.degToRad = degToRad;
   $.radToDeg = radToDeg;
 
   /**
    * Class easily manipulation
-   */ 
+   */
   $.extend           = extend;
   $.reader           = reader;
   $.writer           = writer;
@@ -557,7 +559,7 @@ var MVC = MVCommons;
 
   /**
    * Type checkers
-   */ 
+   */
   $.isArray          = isArray;
   $.isFunction       = isFunction;
   $.Boolean          = boolFunc;
@@ -565,51 +567,51 @@ var MVC = MVCommons;
 
   /**
    * Object manipulation
-   */ 
+   */
   $.shallowClone     = shallowClone;
   $.deepClone        = deepClone;
   $.options          = options;
 
   /**
    * RPG objects utilities
-   */ 
+   */
   $.getTag           = getTag;
   $.getProp          = getProp;
   $.extractEventMeta = extractEventMeta;
 
   /**
    * Evaling things
-   */ 
+   */
   $.safeEval = safeEval;
 
   /**
    * End MVCommons main module
-   */ 
+   */
 })(MVCommons);
 
 
 /**
  * PluginManager
  * This wrapper function contains enhancements to the PluginManager class
- */ 
+ */
 (function($){
   /**
    * [ private ]
    * PluginManager._Imported
    * Object to hold data for all imported plugins
    * @private
-   */ 
+   */
   $._Imported = {};
 
   /**
    * [ private ]
    * PluginManager._printAuthorWithFullData(author)
-   * 
+   *
    * @param author an object containing many author attributes.
-   * 
+   *
    * Prints author data to the console
    * @private
-   */ 
+   */
   $._printAuthorWithFullData = function(author) {
     console.log("    %c%s%c <%c%s%c> @ %c%s%c.",
       "color: rgb(27, 108, 184);",
@@ -622,12 +624,12 @@ var MVC = MVCommons;
   /**
    * [ private ]
    * PluginManager._printAuthorWithWebsite(object author)
-   * 
+   *
    * @param author A Javascript object with name and website fields.
-   * 
+   *
    * @return This function does not return a value.
    * @private
-   * 
+   *
    * Prints the author's name and website url to the console.
    * This function is only intended for internal use.
    */
@@ -642,14 +644,14 @@ var MVC = MVCommons;
   /**
    * [ private ]
    * PluginManager._printAuthorWithEmail(object author)
-   * 
+   *
    * @param author A Javascript object with name and email fields.
    *
    * @return This function does not return a value.
    * @private
-   * 
+   *
    * Prints the author's name and email to the console.
-   * This function is only intended for internal use. 
+   * This function is only intended for internal use.
    */
   $._printAuthorWithEmail = function(author) {
     console.log("    %c%s%c <%c%s%c>.",
@@ -827,7 +829,7 @@ var MVC = MVCommons;
   /**
    * PluginManager.printPlugin(string key)
    * Logs a plugin's information to the console.
-   * 
+   *
    * key: The key for a plugin's entry. If the given key was not
    *      registered with the PluginManager, the function fails.
    */
@@ -891,7 +893,7 @@ var MVC = MVCommons;
    * Date Formats:   http: *www.w3schools.com/js/js_date_formats.asp
    *
    * Returns:
-   * This function returns true on success and false on failure, OR, 
+   * This function returns true on success and false on failure, OR,
    * returns undefined if a required plugin is missing and exit is false.
    */
   $.register = function(key, version, desc, author, date, required, exit) {
@@ -1040,10 +1042,10 @@ var MVC = MVCommons;
 /**
  * Number.prototype
  * This wrapper function contains enhancements to the Number class
- */ 
+ */
 (function($){ // Number
   /**
-   * Drops anything after the 12th decimal place of the number, thus, 
+   * Drops anything after the 12th decimal place of the number, thus,
    * fixing javascript's issue with decimal operations.
    * Examples:
    *   Math.ceil((0.2 + 0.1) * 10) == 4
@@ -1091,7 +1093,7 @@ var MVC = MVCommons;
 /**
  * Bitmap.prototype
  * This wrapper function contains enhancements to the Bitmap class
- */ 
+ */
 (function($){
   /**
    * Bitmap.prototype.copySection(x,y,w,h)
@@ -1115,8 +1117,8 @@ var MVC = MVCommons;
 /**
  * ImageManager
  * This wrapper function contains enhancements to the ImageManager class
- */ 
-(function($){ 
+ */
+(function($){
   /**
    * ImageManager.loadImage(filePath, hue, smooth)
    * @param filePath The path of the image to load
@@ -1152,11 +1154,11 @@ var MVC = MVCommons;
 /**
  * StorageManager
  * This wrapper function contains enhancements to the StorageManager class
- */ 
+ */
 (function($) {
   /**
    * StorageManager.localContentPath()
-   * 
+   *
    */
   $.localContentPath = function() {
     var id = this.localFileDirectoryPath().lastIndexOf("/") - 4;
@@ -1165,7 +1167,7 @@ var MVC = MVCommons;
 
   /**
    * StorageManager.storageFileExists(filePath, isRegex)
-   * 
+   *
    */
   $.storageFileExists = function(filePath, isRegex) {
     if(this.isLocalMode()) {
@@ -1182,7 +1184,7 @@ var MVC = MVCommons;
 
   /**
    * StorageManager.directoryExists(dirPath)
-   * 
+   *
    */
   $.directoryExists = function(dirPath) {
     if(this.isLocalMode()) {
@@ -1199,7 +1201,7 @@ var MVC = MVCommons;
 
   /**
    * StorageManager.removeDirectory(dirPath)
-   * 
+   *
    */
   $.removeDirectory = function(dirPath) {
     if(this.isLocalMode()) {
@@ -1221,7 +1223,7 @@ var MVC = MVCommons;
 
   /**
    * StorageManager.storageSaveFile(filePath, json)
-   * 
+   *
    */
   $.storageSaveFile = function(filePath, json) {
     var data = undefined;
@@ -1239,7 +1241,7 @@ var MVC = MVCommons;
 
   /**
    * StorageManager.storageLoadFile(filePath)
-   * 
+   *
    */
   $.storageLoadFile = function(filePath) {
     if(this.isLocalMode()) {
@@ -1263,7 +1265,7 @@ var MVC = MVCommons;
 
   /**
    * StorageManager.storageRemoveFile(filePath)
-   * 
+   *
    */
   $.storageRemoveFile = function(filePath) {
     if(this.isLocalMode()) {
@@ -1290,7 +1292,7 @@ var MVC = MVCommons;
 /**
  * DataManager
  * This wrapper function contains enhancements to the DataManager class
- */ 
+ */
 (function($){
   $.ajaxLoadFile      = MVC.ajaxLoadFile;
   $.ajaxLoadFileAsync = MVC.ajaxLoadFileAsync;
@@ -1308,9 +1310,9 @@ var MVC = MVCommons;
 
 
 /**
- * This wrapper function contains information on this plugins 
+ * This wrapper function contains information on this plugins
  * authors and also registers the plugin with the PluginManager.
- */ 
+ */
 (function() {
   /**
    * authors
