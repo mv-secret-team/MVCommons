@@ -72,7 +72,7 @@ var MVC = MVCommons;
    * A string containing the latest version number of this plugin.
    * This is used when registering MVCommons with the plugin manager.
    */
-  $.VERSION = "1.2.2"
+  $.VERSION = "1.2.3"
 
   /**
    * MVC.VERSION_DATE
@@ -180,14 +180,14 @@ var MVC = MVCommons;
    */
   function ajaxLoadFile(filePath, mimeType) {
     mimeType = mimeType || "application/json";
-    var xmlhttp=new XMLHttpRequest();
-    xmlhttp.open("GET",filePath,false);
-    if (mimeType && xmlhttp.overrideMimeType) {
-      xmlhttp.overrideMimeType(mimeType);
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET",filePath,false);
+    if (mimeType && xhr.overrideMimeType) {
+      xhr.overrideMimeType(mimeType);
     }
-    xmlhttp.send();
-    if (xmlhttp.status < 200) {
-      return xmlhttp.responseText;
+    xhr.send();
+    if (xhr.status < 200) {
+      return xhr.responseText;
     }
     else {
       throw new Error("Cannot load file " + filePath);
@@ -207,7 +207,7 @@ var MVC = MVCommons;
     var xhr = new XMLHttpRequest();
     var name = '$' + filePath.replace(/^.*(\\|\/|\:)/, '').replace(/\..*/, '');
     xhr.open('GET', filePath);
-    if (mimeType && xmlhttp.overrideMimeType) {
+    if (mimeType && xhr.overrideMimeType) {
       xhr.overrideMimeType(mimeType);
     }
     if(onLoad === undefined){
