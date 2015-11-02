@@ -2,7 +2,7 @@
 // MVCommons
 // By The MV Secret Team
 // MVCommons.js
-// Version: 1.2.1
+// Version: 1.3.0
 // Released under CC0 Universal 1.0
 // You can read the full license from here:
 //    https://creativecommons.org/publicdomain/zero/1.0/legalcode
@@ -72,7 +72,7 @@ var MVC = MVCommons;
    * A string containing the latest version number of this plugin.
    * This is used when registering MVCommons with the plugin manager.
    */
-  $.VERSION = "1.2.3"
+  $.VERSION = "1.3.0"
 
   /**
    * MVC.VERSION_DATE
@@ -915,7 +915,6 @@ var MVC = MVCommons;
         if(!!exit){
           Graphics.printError("Error loading " + key + "!", "The following scripts are required:\n\n" + list);
           SceneManager.stop();
-          return undefined;
         } else {
           console.log("Error loading " + key + "! The following scripts are required:\n\n" + list + "\n\nThe game will continue to run, but the imported plugin may cause errors, malfunction, or   not operate.");
         }
@@ -933,6 +932,27 @@ var MVC = MVCommons;
     };
     return true;
   };
+
+  MVCommons.PM_params_IO4b2iovn = PluginManager.parameters;
+  $.parameters = function(id) {
+    if(JSON.stringify(MVC.PM_params_IO4b2iovn.call(this, id)) === "{}") {
+      for (var i = 0; i < $plugins.length; i++) {
+        var regex = new RegExp("<\\s*pluginid\\s*" + id + "\\s*>", "i");
+        if($plugins[i].description.match(regex)) {
+          return MVC.PM_params_IO4b2iovn.call(this, $plugins[i].name);
+        }
+      }
+      for (var i = 0; i < this._scripts.length; i++) {
+        if(this._scripts[i].contains("," + id)) {
+          return MVC.PM_params_IO4b2iovn.call(this, this._scripts[i]);
+        }
+      }
+    } else {
+      return MVC.PM_params_IO4b2iovn.call(this, id);
+    }
+    console.error("No parameters could be found for '" + id + "' !!");
+    return {};
+  }
 
   /**
    * PluginManager.setDate(string date)
