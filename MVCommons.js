@@ -2,7 +2,7 @@
 // MVCommons
 // By The MV Secret Team
 // MVCommons.js
-// Version: 1.3.0
+// Version: 1.4.0
 // Released under CC0 Universal 1.0
 // You can read the full license from here:
 //    https://creativecommons.org/publicdomain/zero/1.0/legalcode
@@ -72,14 +72,14 @@ var MVC = MVCommons;
    * A string containing the latest version number of this plugin.
    * This is used when registering MVCommons with the plugin manager.
    */
-  $.VERSION = "1.3.0"
+  $.VERSION = "1.4.0"
 
   /**
    * MVC.VERSION_DATE
    * A string containing the date the latest version was created.
    * This is used when registering MVCommons with the plugin manager.
    */
-  $.VERSION_DATE = "2015-10-27"
+  $.VERSION_DATE = "2015-11-08"
 
   //============================================================================
   // Private functions
@@ -1327,6 +1327,25 @@ var MVC = MVCommons;
    * End DataManager wrapper
    */
 })(DataManager);
+
+
+/**
+ *
+ * This brings back the min and max functions used often
+ * on arrays to quickly clamp a set of data. Sure, we
+ * have the clamp function, but that only works on 2
+ * numbers at a time. This works on arrays!
+ *
+ */
+(function($) {
+  $.prototype.min = function() {
+    return Math.min.apply(null, this);
+  }
+
+  $.prototype.max = function() {
+    return Math.max.apply(null, this);
+  }
+})(Array);
 
 
 /**
