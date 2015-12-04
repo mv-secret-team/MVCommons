@@ -2,7 +2,7 @@
 // MVCommons
 // By The MV Secret Team
 // MVCommons.js
-// Version: 1.4.0
+// Version: 1.5.0
 // Released under CC0 Universal 1.0
 // You can read the full license from here:
 //    https://creativecommons.org/publicdomain/zero/1.0/legalcode
@@ -62,24 +62,24 @@ var MVC = MVCommons;
  * MVCommons module
  */
 (function($){
+  "use strict";
   /**
    * Use strict mode for better code smell
    */
-  "use strict"
 
   /**
    * MVC.VERSION
    * A string containing the latest version number of this plugin.
    * This is used when registering MVCommons with the plugin manager.
    */
-  $.VERSION = "1.4.0"
+  $.VERSION = "1.5.0"
 
   /**
    * MVC.VERSION_DATE
    * A string containing the date the latest version was created.
    * This is used when registering MVCommons with the plugin manager.
    */
-  $.VERSION_DATE = "2015-11-08"
+  $.VERSION_DATE = "2015-12-04"
 
   //============================================================================
   // Private functions
@@ -144,6 +144,16 @@ var MVC = MVCommons;
   }
 
   /**
+   * MVC.isObject(obj)
+   * Checks if the given value is a JS object ( {} )
+   * @param {Object} obj The object to be checked.
+   * @returns {Boolean} Whether or not the given argument is a JS object.
+   */
+  function isObject(obj) {
+    return obj && Object.prototype.toString.apply(obj) === '[object Object]';
+  }
+
+  /**
    * MVC.Boolean(str)
    * @param str The string to compare to true.
    * @return A boolean value representing if str is true or not
@@ -186,7 +196,7 @@ var MVC = MVCommons;
       xhr.overrideMimeType(mimeType);
     }
     xhr.send();
-    if (xhr.status < 200) {
+    if (xhr.status < 400) {
       return xhr.responseText;
     }
     else {
@@ -562,6 +572,7 @@ var MVC = MVCommons;
    */
   $.isArray          = isArray;
   $.isFunction       = isFunction;
+  $.isObject         = isObject;
   $.Boolean          = boolFunc;
   $.naturalBoolean   = naturalBoolean;
 
@@ -1176,27 +1187,36 @@ var MVC = MVCommons;
  * This wrapper function contains enhancements to the StorageManager class
  */
 (function($) {
-  /**
+  /*
    * StorageManager.localContentPath()
-   *
+   * @note
+   * Returns the folder on the computer that the game is running
+   * from. While this works on any platform, it only really
+   * matters on the desktop clients, as that's where we have access
+   * to the filesystem.
+   * @return {String} The base filepath for the game.
    */
   $.localContentPath = function() {
-    var id = this.localFileDirectoryPath().lastIndexOf("/") - 4;
-    return this.localFileDirectoryPath().substring(0, id);
-  };
+    console.warn("Warning: This function is deprecated. Please use the zAPI plugin for file manipulation.");
+    var path = window.location.pathname.replace(/\/[^\/]*$/, '');
+    if (path.match(/^\/([A-Z]\:)/)) {
+      path = path.slice(1);
+    }
+    if(path.lastIndexOf("/") !== path.length - 1) {
+      path += "/";
+    }
+    return decodeURIComponent(path);
+  }
 
   /**
-   * StorageManager.storageFileExists(filePath, isRegex)
+   * StorageManager.storageFileExists(filePath)
    *
    */
-  $.storageFileExists = function(filePath, isRegex) {
+  $.storageFileExists = function(filePath) {
+    console.warn("Warning: This function is deprecated. Please use the zAPI plugin for file manipulation.");
     if(this.isLocalMode()) {
       var fs = require('fs');
-      try {
-        return fs.statSync(this.localContentPath() + filePath).isFile();
-      } catch(e) {
-        return false;
-      }
+      return fs.statSync(this.localContentPath() + filePath).isFile();
     } else {
       return !!localStorage.getItem(filePath);
     }
@@ -1207,9 +1227,9 @@ var MVC = MVCommons;
    *
    */
   $.directoryExists = function(dirPath) {
+    console.warn("Warning: This function is deprecated. Please use the zAPI plugin for file manipulation.");
     if(this.isLocalMode()) {
       try {
-        var fs = require('fs');
         return fs.statSync(this.localContentPath() + dirPath).isDirectory();
       } catch(e) {
         return false;
@@ -1224,21 +1244,24 @@ var MVC = MVCommons;
    *
    */
   $.removeDirectory = function(dirPath) {
+    console.warn("Warning: This function is deprecated. Please use the zAPI plugin for file manipulation.");
+    var fs = require('fs');
     if(this.isLocalMode()) {
-      try {
-        var fs = require('fs');
-        if(fs.statSync(this.localContentPath() + dirPath).isDirectory()) {
-          fs.rmdir(this.localContentPath() + dirPath);
-          return true;
-        }
-      } catch(e) {
+      if( fs.existsSync(dirPath) ) {
+        fs.readdirSync(dirPath).forEach(function(file,index){
+          var curPath = dirPath + "/" + file;
+          if(fs.lstatSync(curPath).isDirectory()) { // recurse
+            this.removeDirectorySync(curPath);
+          } else { // delete file
+            fs.unlinkSync(curPath);
+          }
+        });
+        fs.rmdirSync(dirPath);
+      } else {
         return false;
       }
-      fs.rmdir(this.localContentPath() + dirPath);
-      return true;
-    } else {
-      return true;
     }
+    return true;
   };
 
   /**
@@ -1246,15 +1269,14 @@ var MVC = MVCommons;
    *
    */
   $.storageSaveFile = function(filePath, json) {
-    var data = undefined;
+    console.warn("Warning: This function is deprecated. Please use the zAPI plugin for file manipulation.");
+    data = LZString.compressToBase64(json);
     if(this.isLocalMode()) {
-      data = LZString.compressToBase64(json);
       var fs = require('fs');
       var dirPath = this.localContentPath() + filePath.substring(0, filePath.lastIndexOf("/") + 1);
       fs.mkdirSync(dirPath);
       fs.writeFileSync(this.localContentPath() + filePath, data);
     } else {
-      data = LZString.compressToBase64(data);
       localStorage.saveItem(filePath, data);
     }
   };
@@ -1264,6 +1286,7 @@ var MVC = MVCommons;
    *
    */
   $.storageLoadFile = function(filePath) {
+    console.warn("Warning: This function is deprecated. Please use the zAPI plugin for file manipulation.");
     if(this.isLocalMode()) {
       var fs = require('fs');
       try {
@@ -1288,6 +1311,7 @@ var MVC = MVCommons;
    *
    */
   $.storageRemoveFile = function(filePath) {
+    console.warn("Warning: This function is deprecated. Please use the zAPI plugin for file manipulation.");
     if(this.isLocalMode()) {
       var fs = require('fs');
       try {
@@ -1308,7 +1332,6 @@ var MVC = MVCommons;
    */
 })(StorageManager);
 
-
 /**
  * DataManager
  * This wrapper function contains enhancements to the DataManager class
@@ -1316,37 +1339,141 @@ var MVC = MVCommons;
 (function($){
   $.ajaxLoadFile      = MVC.ajaxLoadFile;
   $.ajaxLoadFileAsync = MVC.ajaxLoadFileAsync;
-  $.localContentPath  = StorageManager.localContentPath;
-  $.storageFileExists = StorageManager.storageFileExists;
-  $.directoryExists   = StorageManager.directoryExists;
-  $.removeDirectory   = StorageManager.removeDirectory;
-  $.storageSaveFile   = StorageManager.storageSaveFile;
-  $.storageLoadFile   = StorageManager.storageLoadFile;
-  $.storageRemoveFile = StorageManager.storageRemoveFile;
-  /**
-   * End DataManager wrapper
-   */
 })(DataManager);
 
-
-/**
+/* ---------------------------------------------------------------------------
+ *   Polyfills
+ * ---------------------------------------------------------------------------
  *
- * This brings back the min and max functions used often
- * on arrays to quickly clamp a set of data. Sure, we
- * have the clamp function, but that only works on 2
- * numbers at a time. This works on arrays!
- *
+ * Below are functions that are provided to ensure that the functions are
+ * available on all platforms. If the function is already available, it will
+ * not be changed. If it is not available, it will be added as defined below.
  */
+
 (function($) {
-  $.prototype.min = function() {
-    return Math.min.apply(null, this);
+  /*
+   * Array.prototype.min
+   * @note
+   * @return The minimum value
+   */
+  if(!Array.prototype.min) {
+    $.prototype.min = function() {
+      return Math.min.apply(null, this);
+    }
   }
 
-  $.prototype.max = function() {
-    return Math.max.apply(null, this);
+  /*
+   * Array.prototype.max
+   * @note
+   * @return The maximum value
+   */
+  if(!Array.prototype.max) {
+    $.prototype.max = function() {
+      return Math.max.apply(null, this);
+    }
+  }
+
+  /*
+   * Array.prototype.find
+   * @param {function} predicate A function that will take the element, index, and array and return any true value if found. If not, it should return any false value.
+   * @note
+   * @return The object that you're looking for, or undefined if not found.
+   */
+  if (!Array.prototype.find) {
+    $.prototype.find = function(predicate) {
+      if (this === null) {
+        throw new TypeError('Array.prototype.find called on null or undefined');
+      }
+      if (typeof predicate !== 'function') {
+        throw new TypeError('predicate must be a function');
+      }
+      var list = Object(this);
+      var length = list.length >>> 0;
+      var thisArg = arguments[1];
+      var value;
+
+      for (var i = 0; i < length; i++) {
+        value = list[i];
+        if (predicate.call(thisArg, value, i, list)) {
+          return value;
+        }
+      }
+      return undefined;
+    }
   }
 })(Array);
 
+(function($){
+  /*
+   * String.prototype.endsWith(searchString, position)
+   * @return {Boolean} Returns true if this string ends with the SearchString, false otherwise.
+   */
+  if (!$.endsWith) {
+    $.endsWith = function(searchString, position) {
+      var subjectString = this.toString();
+      if (typeof position !== 'number' || !isFinite(position) || Math.floor(position) !== position || position > subjectString.length) {
+        position = subjectString.length;
+      }
+      position -= searchString.length;
+      var lastIndex = subjectString.indexOf(searchString, position);
+      return lastIndex !== -1 && lastIndex === position;
+    }
+  }
+
+  /*
+   * String.prototype.dirname
+   * @return {String} This string without any filename component.
+   */
+  if(!$.dirname) {
+    $.dirname = function() {
+      return this.replace(/\/[^\/]+?$/, '');
+    }
+  }
+
+  /*
+   * String.prototype.basename(ext)
+   * @param {String} ext An optional extension to remove.
+   * @return {String} This string, without a folder path or given extension.
+   */
+  if(!$.basename) {
+    $.basename = function(ext) {
+      if(!ext) {
+        return this.replace(/.+\//, '');
+      }
+      var str = this.replace(/.+\//, '');
+      if(str.lastIndexOf(ext) >= 0) {
+        return str.substring(0, str.lastIndexOf(ext));
+      }
+      return str;
+    }
+  }
+
+  /*
+   * String.prototype.escape
+   * @return {String} Returns a regex-escaped copy of this string.
+   */
+  if(!$.escape) {
+    $.escape = function() {
+      return this.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&");
+    }
+  }
+
+  /*
+   * String.prototype.splice(index, count, add)
+   * @param {Number} index The starting index to cut from.
+   * @param {Number} count The number of characters to cut.
+   * @param {String} add Characters to put in the cut content's place.
+   * @note
+   * Similar to array.splice, remove the character between index and
+   * index + count from the string, and return it.
+   * @return {String} The modified string.
+   */
+  if(!$.splice) {
+    $.splice = function(index, count, add) {
+      return this.slice(0, index) + (add || "") + this.slice(index + count);
+    }
+  }
+})(String.prototype);
 
 /**
  * This wrapper function contains information on this plugins
